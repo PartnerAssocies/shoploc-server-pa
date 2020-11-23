@@ -15,7 +15,8 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-
+.idea/
+shoploc-server.iml
 # External tool builders
 .externalToolBuilders/
 
