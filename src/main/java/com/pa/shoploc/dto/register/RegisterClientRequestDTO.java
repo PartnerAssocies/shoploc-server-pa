@@ -1,17 +1,23 @@
 package com.pa.shoploc.dto.register;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
+public class RegisterClientRequestDTO extends RegisterUserRequestDTO {
 
+    private String nom;
+    private String prenom;
 
+    public String getNom() {
+        return nom;
+    }
 
-@Getter @Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class RegisterClientRequestDTO extends RegisterUserRequestDTO{
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-    String nom;
-    String prenom;
+    public String getPrenom() {
+        return prenom;
+    }
 
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
 }

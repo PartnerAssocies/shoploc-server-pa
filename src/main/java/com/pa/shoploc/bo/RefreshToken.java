@@ -1,19 +1,28 @@
 package com.pa.shoploc.bo;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@Getter @Setter
 @Entity
 public class RefreshToken {
     @Id
-    String refreshToken;
-    String username;
+    private String refreshToken;
+    private String username;
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
 }

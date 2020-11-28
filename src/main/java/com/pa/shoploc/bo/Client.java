@@ -1,22 +1,56 @@
 package com.pa.shoploc.bo;
 
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-@Getter @Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Client extends User{
-    String nom;
-    String prenom;
-    double argent;
-    @Column(columnDefinition="BOOLEAN DEFAULT false")
-    boolean estVfp;
-    int pointsFidelites;
+public class Client extends User {
+
+    private String nom;
+    private String prenom;
+    private double argent;
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean estVfp;
+    private int pointsFidelites;
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public double getArgent() {
+        return argent;
+    }
+
+    public void setArgent(double argent) {
+        this.argent = argent;
+    }
+
+    public boolean isEstVfp() {
+        return estVfp;
+    }
+
+    public void setEstVfp(boolean estVfp) {
+        this.estVfp = estVfp;
+    }
+
+    public int getPointsFidelites() {
+        return pointsFidelites;
+    }
+
+    public void setPointsFidelites(int pointsFidelites) {
+        this.pointsFidelites = pointsFidelites;
+    }
 }
