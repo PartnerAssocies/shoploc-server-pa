@@ -29,12 +29,12 @@ public class AuthenticationController {
      * @return un user avec son access-token et son refresh-token
      */
     @PostMapping("/login")
-    public LoginDTO login(@RequestParam("username")String username,@RequestParam("password")String password){
+    public LoginDTO login(@RequestParam("username")String username,@RequestParam("password")String password) throws Exception{
         if(StringUtils.isEmpty(username)||StringUtils.isEmpty(password))
             throw new IllegalArgumentException();
 
-        Authentication authentication=new UsernamePasswordAuthenticationToken(username,password);
 
+        Authentication authentication=new UsernamePasswordAuthenticationToken(username,password);
         authenticationManager.authenticate(authentication);
         LoginDTO dto=authenticationService.login(username);
 

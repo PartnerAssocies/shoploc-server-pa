@@ -3,12 +3,15 @@ package com.pa.shoploc.service.impl;
 
 import com.pa.shoploc.bo.RefreshToken;
 import com.pa.shoploc.dto.LoginDTO;
+import com.pa.shoploc.enumeration.Role;
 import com.pa.shoploc.exceptions.token.InvalidRefreshTokenException;
+import com.pa.shoploc.exceptions.token.UserInValidationException;
 import com.pa.shoploc.repository.UserRepository;
 import com.pa.shoploc.service.AuthenticationService;
 import com.pa.shoploc.service.JwtTokenService;
 import com.pa.shoploc.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -46,10 +49,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * @return
      */
     @Override
-    public LoginDTO login(String username) {
+    public LoginDTO login(String username) throws Exception{
         final UserDetails userDetails = loadUserByUsername(username);
-        final String accessToken = jwtTokenService.generateAccessToken(username);
         final String role=userDetails.getAuthorities().iterator().next().getAuthority();
+        if(role.equals("ROLE_"+Role.EN_ATTENTE))
+            throw new UserInValidationException();
+
+        final String accessToken = jwtTokenService.generateAccessToken(username);
         final String refreshToken = jwtTokenService.generateRefreshToken(username).getRefreshToken();
 
         LoginDTO loginDTO=new LoginDTO();

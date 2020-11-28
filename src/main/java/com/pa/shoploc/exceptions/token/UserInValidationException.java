@@ -5,6 +5,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.ServletException;
 @ResponseStatus(code = HttpStatus.LOCKED, reason = "User not validate")
-public class UserInValidationException extends ServletException {
+public class UserInValidationException extends Exception {
 
 }
