@@ -1,6 +1,8 @@
 package com.pa.shoploc.config;
 
 import com.pa.shoploc.bo.User;
+import com.pa.shoploc.enumeration.Role;
+import com.pa.shoploc.exceptions.token.UserInValidationException;
 import com.pa.shoploc.service.AuthenticationService;
 import com.pa.shoploc.service.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             User user = (User) authenticationService.loadUserByUsername(username);
+            if(user.getRole().equals(Role.EN_ATTENTE))
+                throw new UserInValidationException();
             if (jwtTokenService.validateAccessToken(token, user)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         username, null, user.getAuthorities());

@@ -5,5 +5,5 @@ package com.pa.shoploc.enumeration;
  */
 public enum Role {
 
-    ADMIN,CLIENT,COMMERCANT
+    ADMIN,CLIENT,COMMERCANT,EN_ATTENTE;
 }
