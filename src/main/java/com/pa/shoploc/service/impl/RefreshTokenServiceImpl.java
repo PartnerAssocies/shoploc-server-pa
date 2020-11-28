@@ -20,6 +20,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return refreshTokenRepository.save(refreshToken);
     }
 
+    @Override
+    public void deleteById(String token) {
+        refreshTokenRepository.deleteById(token);
+    }
+
     @Autowired
     public void setRefreshTokenRepository(RefreshTokenRepository refreshTokenRepository) {
         this.refreshTokenRepository = refreshTokenRepository;

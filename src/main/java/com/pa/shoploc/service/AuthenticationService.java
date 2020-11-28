@@ -17,4 +17,6 @@ public interface AuthenticationService extends UserDetailsService{
      void setJwtTokenService(JwtTokenService jwtTokenService);
 
      void setUserRepository(UserRepository userRepository);
+
+    void revoke(String token);
 }

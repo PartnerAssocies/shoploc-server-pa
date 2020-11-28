@@ -86,6 +86,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.userRepository = userRepository;
     }
 
+    @Override
+    public void revoke(String token){
+        refreshTokenService.deleteById(token);
+    }
+
     @Autowired
     public void setRefreshTokenService(RefreshTokenService refreshTokenService) {
         this.refreshTokenService = refreshTokenService;

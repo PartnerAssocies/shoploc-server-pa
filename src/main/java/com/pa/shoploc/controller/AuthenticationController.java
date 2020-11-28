@@ -48,6 +48,14 @@ public class AuthenticationController {
         return authenticationService.refreshAccessToken(token);
     }
 
+    @DeleteMapping("/revoke/{refresh-token}")
+    public void revoke(@PathVariable(value="refresh-token") String token) throws Exception{
+        if(StringUtils.isEmpty(token))
+            throw new IllegalArgumentException();
+        authenticationService.revoke(token);
+    }
+
+
     @Autowired
     public void setAuthenticationService(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
