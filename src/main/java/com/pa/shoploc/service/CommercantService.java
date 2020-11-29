@@ -1,9 +1,10 @@
 package com.pa.shoploc.service;
 
 import com.pa.shoploc.dto.commercant.RegisterCommercantDTO;
+import com.pa.shoploc.dto.commercant.RegisterCommercantResponseDTO;
 
 public interface CommercantService {
 
-    String registerCommercant(RegisterCommercantDTO commercantDTO) throws Exception;
+    RegisterCommercantResponseDTO registerCommercant(RegisterCommercantDTO commercantDTO) throws Exception;
 
 }

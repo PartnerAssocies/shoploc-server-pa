@@ -1,8 +1,11 @@
 package com.pa.shoploc.service.impl;
 
+import com.pa.shoploc.bo.Client;
 import com.pa.shoploc.bo.Commercant;
 import com.pa.shoploc.dto.commercant.RegisterCommercantDTO;
+import com.pa.shoploc.dto.commercant.RegisterCommercantResponseDTO;
 import com.pa.shoploc.exceptions.find.LieuNotFoundException;
+import com.pa.shoploc.exceptions.find.UserNotFoundException;
 import com.pa.shoploc.repository.CommercantRepository;
 import com.pa.shoploc.service.ClientService;
 import com.pa.shoploc.service.CommercantService;
@@ -18,8 +21,20 @@ public class CommercantServiceImpl implements CommercantService {
     private LieuService lieuService;
 
     @Override
-    public String registerCommercant(RegisterCommercantDTO commercantDTO) throws Exception {
+    public RegisterCommercantResponseDTO registerCommercant(RegisterCommercantDTO commercantDTO) throws Exception {
 
+        try{
+            Commercant c = this.commercantRepository.findById(commercantDTO.getUsername()).orElse(null);
+            if(c != null)
+                throw new IllegalArgumentException("Commercant already exists");
+        }catch(Exception e){
+            throw new IllegalArgumentException(e);
+        }
+        try{
+            Client c = clientService.findById(commercantDTO.getUsername());
+        }catch(UserNotFoundException e){
+
+        }
         Commercant commercant = new Commercant();
         commercant.setUsername(commercantDTO.getUsername());
         commercant.setPassword(commercantDTO.getPassword());
@@ -33,7 +48,7 @@ public class CommercantServiceImpl implements CommercantService {
         }
         commercant.setLibelleMagasin(commercantDTO.getLibelleMagasin());
         this.commercantRepository.save(commercant);
-        return commercant.getUsername();
+        return new RegisterCommercantResponseDTO(commercant.getUsername());
     }
 
     @Autowired
