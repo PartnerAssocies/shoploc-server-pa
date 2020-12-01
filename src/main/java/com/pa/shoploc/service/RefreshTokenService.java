@@ -7,4 +7,6 @@ public interface RefreshTokenService {
     RefreshToken findById(String id);
 
     RefreshToken save(RefreshToken refreshToken);
+
+    void deleteById(String token);
 }

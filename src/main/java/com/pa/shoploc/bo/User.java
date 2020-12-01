@@ -16,7 +16,7 @@ import java.util.Collection;
 /**
  * Entite representant un user et servant à l'authentification
  */
-@FieldDefaults(level = AccessLevel.PROTECTED)
+
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 public class User implements Serializable,UserDetails {

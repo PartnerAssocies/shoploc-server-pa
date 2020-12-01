@@ -26,14 +26,14 @@ public class ClientServiceImpl implements ClientService {
      * Crée un user
      */
     @Override
-    public Client register(RegisterClientRequestDTO user) throws Exception{
+    public Client register(RegisterClientRequestDTO user) throws Exception {
 
-        try{
+        try {
             findById(user.getUsername());
             throw new EmailAlreadyExistException();
-        }catch (UserNotFoundException e){
-            Lieu l=lieuService.findOneById(user.getLieu());
-            Client request=new Client();
+        } catch (UserNotFoundException e) {
+            Lieu l = lieuService.findOneById(user.getLieu());
+            Client request = new Client();
 
             //remplie l'objet à save
             request.setUsername(user.getUsername());
@@ -45,20 +45,20 @@ public class ClientServiceImpl implements ClientService {
             request.setArgent(0);
             request.setPointsFidelites(0);
 
-            Client response=clientRepository.save(request);
+            Client response = clientRepository.save(request);
 
-            if(response==null)
+            if (response == null)
                 throw new UnableToSaveUserException();
 
-             return response;
+            return response;
         }
 
     }
 
     @Override
     public Client findById(String username) throws Exception {
-        Client c=clientRepository.findById(username).orElse(null);
-        if(c==null)
+        Client c = clientRepository.findById(username).orElse(null);
+        if (c == null)
             throw new UserNotFoundException();
 
         return c;

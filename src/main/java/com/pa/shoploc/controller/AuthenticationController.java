@@ -5,6 +5,7 @@ import com.pa.shoploc.exceptions.token.InvalidRefreshTokenException;
 import com.pa.shoploc.service.AuthenticationService;
 import com.pa.shoploc.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,12 +29,12 @@ public class AuthenticationController {
      * @return un user avec son access-token et son refresh-token
      */
     @PostMapping("/login")
-    public LoginDTO login(@RequestParam("username")String username,@RequestParam("password")String password){
+    public LoginDTO login(@RequestParam("username")String username,@RequestParam("password")String password) throws Exception{
         if(StringUtils.isEmpty(username)||StringUtils.isEmpty(password))
             throw new IllegalArgumentException();
 
-        Authentication authentication=new UsernamePasswordAuthenticationToken(username,password);
 
+        Authentication authentication=new UsernamePasswordAuthenticationToken(username,password);
         authenticationManager.authenticate(authentication);
         LoginDTO dto=authenticationService.login(username);
 
@@ -47,6 +48,14 @@ public class AuthenticationController {
 
         return authenticationService.refreshAccessToken(token);
     }
+
+    @DeleteMapping("/revoke/{refresh-token}")
+    public void revoke(@PathVariable(value="refresh-token") String token) throws Exception{
+        if(StringUtils.isEmpty(token))
+            throw new IllegalArgumentException();
+        authenticationService.revoke(token);
+    }
+
 
     @Autowired
     public void setAuthenticationService(AuthenticationService authenticationService) {

@@ -10,11 +10,13 @@ import java.util.Optional;
 @Service
 public interface AuthenticationService extends UserDetailsService{
 
-     LoginDTO login(String username);
+     LoginDTO login(String username) throws Exception;
 
      String refreshAccessToken(String token) throws Exception;
 
      void setJwtTokenService(JwtTokenService jwtTokenService);
 
      void setUserRepository(UserRepository userRepository);
+
+    void revoke(String token);
 }
