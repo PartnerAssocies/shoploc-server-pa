@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
-public class ClientServiceIntegrationTest {
+public class ClientServiceIntegrationImplTest {
 
     @TestConfiguration
     static class ClientServiceTestContextConfiguration {
