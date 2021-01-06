@@ -1,5 +1,7 @@
 package com.pa.shoploc.bo;
 
+
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;

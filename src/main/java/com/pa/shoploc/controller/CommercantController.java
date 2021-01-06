@@ -4,6 +4,7 @@ package com.pa.shoploc.controller;
 import com.pa.shoploc.bo.Commercant;
 import com.pa.shoploc.dto.commercant.RegisterCommercantDTO;
 import com.pa.shoploc.dto.commercant.RegisterCommercantResponseDTO;
+import com.pa.shoploc.exceptions.find.UserNotFoundException;
 import com.pa.shoploc.service.CommercantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +28,20 @@ public class CommercantController {
         return this.commercantService.listAllCommercants();
     }
 
+    @GetMapping("/listAllInValidation")
+    public List<Commercant> getAllCommercantsInValidation(){
+        return this.commercantService.listAllCommercantsInValidation();
+    }
+
+    @PostMapping("/authorizeCommercant/{username}")
+    public Commercant authorizeCommercant(@PathVariable String username ,@RequestParam("accept")boolean accept) throws UserNotFoundException {
+        return this.commercantService.authorizeCommercant(username,accept);
+    }
+
+
     @Autowired
     public void setCommercantService(CommercantService commercantService) {
         this.commercantService = commercantService;
     }
+
 }
