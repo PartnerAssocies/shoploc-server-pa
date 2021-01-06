@@ -17,6 +17,8 @@ import com.pa.shoploc.service.LieuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CommercantServiceImpl implements CommercantService {
 
@@ -56,6 +58,10 @@ public class CommercantServiceImpl implements CommercantService {
         commercant.setLibelleMagasin(commercantDTO.getLibelleMagasin());
         this.commercantRepository.save(commercant);
         return new RegisterCommercantResponseDTO(commercant.getUsername());
+    }
+
+    public List<Commercant> listAllCommercants(){
+        return this.commercantRepository.findAll();
     }
 
     @Autowired
