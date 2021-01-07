@@ -47,8 +47,10 @@ public class CommercantServiceImpl implements CommercantService {
         commercant.setUsername(commercantDTO.getUsername());
         commercant.setPassword(commercantDTO.getPassword());
         commercant.setDescription(commercantDTO.getDescription());
-        commercant.setImage("");
+        commercant.setImage(commercantDTO.getImage());
         commercant.setRole(commercantDTO.getRole());
+        commercant.setSiret(commercantDTO.getSiret());
+
         try {
             commercant.setLieu(lieuService.findOneById(commercantDTO.getLieuId()));
         } catch (Exception e) {
