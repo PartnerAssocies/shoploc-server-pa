@@ -1,5 +1,7 @@
 package com.pa.shoploc.bo;
 
+
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
@@ -15,6 +17,8 @@ public class Commercant extends User {
     private String image;
     @Column
     private String description;
+    @Column
+    private String siret;
 
     public String getLibelleMagasin() {
         return libelleMagasin;
@@ -38,5 +42,13 @@ public class Commercant extends User {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSiret() {
+        return siret;
+    }
+
+    public void setSiret(String siret) {
+        this.siret = siret;
     }
 }

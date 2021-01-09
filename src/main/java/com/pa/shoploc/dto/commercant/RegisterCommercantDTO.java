@@ -11,6 +11,7 @@ public class RegisterCommercantDTO {
     private int lieuId;
     private String siret;
     private String description;
+    private String image;
 
     public String getUsername() {
         return username;
@@ -68,4 +69,11 @@ public class RegisterCommercantDTO {
         this.description = description;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
