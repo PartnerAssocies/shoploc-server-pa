@@ -5,10 +5,7 @@ import com.pa.shoploc.bo.User;
 import com.pa.shoploc.dto.commercant.RegisterCommercantDTO;
 import com.pa.shoploc.dto.commercant.RegisterCommercantResponseDTO;
 import com.pa.shoploc.enumeration.Role;
-import com.pa.shoploc.exceptions.find.CommercantAlreadyExistException;
-import com.pa.shoploc.exceptions.find.EmailAlreadyExistException;
-import com.pa.shoploc.exceptions.find.LieuNotFoundException;
-import com.pa.shoploc.exceptions.find.UserNotFoundException;
+import com.pa.shoploc.exceptions.find.*;
 import com.pa.shoploc.repository.CommercantRepository;
 import com.pa.shoploc.repository.UserRepository;
 import com.pa.shoploc.service.CommercantService;
@@ -62,7 +59,7 @@ public class CommercantServiceImpl implements CommercantService {
     }
 
     public List<Commercant> listAllCommercants(){
-        return this.commercantRepository.findAll();
+        return this.commercantRepository.findByRole_(Role.COMMERCANT);
     }
 
     @Override
@@ -82,6 +79,14 @@ public class CommercantServiceImpl implements CommercantService {
             this.userRepository.deleteById(username);
             return null;
         }
+    }
+
+    @Override
+    public Commercant findCommercantById(String username) throws CommercantNotFoundException {
+        Commercant c= commercantRepository.findById(username).orElse(null);
+        if(c==null)
+            throw new CommercantNotFoundException();
+        return c;
     }
 
     @Autowired

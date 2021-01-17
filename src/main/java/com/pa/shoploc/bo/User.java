@@ -18,6 +18,7 @@ import java.util.Collection;
  */
 
 @Inheritance(strategy = InheritanceType.JOINED)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class User implements Serializable,UserDetails {
     @Id

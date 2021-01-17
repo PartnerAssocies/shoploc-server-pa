@@ -5,18 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@SequenceGenerator(initialValue = 1,name = "seqLieu")
 public class Lieu {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seqLieu")
     int lid;
     String adresse;
     String ville;
