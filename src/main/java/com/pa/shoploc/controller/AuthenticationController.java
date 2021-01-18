@@ -1,5 +1,7 @@
 package com.pa.shoploc.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.pa.shoploc.dto.LoginDTO;
 import com.pa.shoploc.exceptions.token.InvalidRefreshTokenException;
 import com.pa.shoploc.service.AuthenticationService;
@@ -11,6 +13,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Controller de gestion de l'authentification
@@ -42,11 +47,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh/{refresh-token}")
-    public String refresh(@PathVariable(value = "refresh-token")  String token) throws Exception{
+    public Map refresh(@PathVariable(value = "refresh-token")  String token) throws Exception{
         if(StringUtils.isEmpty(token))
             throw new IllegalArgumentException();
 
-        return authenticationService.refreshAccessToken(token);
+        return Collections.singletonMap("jwt", authenticationService.refreshAccessToken(token));
     }
 
     @DeleteMapping("/revoke/{refresh-token}")
