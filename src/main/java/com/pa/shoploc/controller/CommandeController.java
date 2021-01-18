@@ -1,6 +1,7 @@
 package com.pa.shoploc.controller;
 
 import com.pa.shoploc.bo.Commande;
+import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
 import com.pa.shoploc.mapper.ContenuCommandeDTO;
 import com.pa.shoploc.service.CommandeService;
 import java.util.List;
@@ -18,6 +19,12 @@ public class CommandeController {
             ,@PathVariable(value = "commercant")  String commercant) throws Exception {
 
         return commandeService.creerCommande(client,commercant);
+
+    }
+
+    @PostMapping("/confirmCommande/{cid}")
+    public Commande confirmCommande(@PathVariable("cid") int cid) throws CommandeNotFoundException {
+        return commandeService.confirmCommande(cid);
 
     }
 

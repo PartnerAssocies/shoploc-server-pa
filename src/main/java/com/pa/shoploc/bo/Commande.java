@@ -25,7 +25,7 @@ public class Commande {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seqCommande")
     private int cid;
 
-    @Column   //will be set when order become ARECUPERER State
+    @Column
     private Date date;
 
     @Column
@@ -68,13 +68,7 @@ public class Commande {
         this.cid = cid;
     }
 
-    public Date getDate() {
-        return date;
-    }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
 
     public double getTotal() {
         return total;
@@ -132,6 +126,13 @@ public class Commande {
         this.commercant = commercant;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public Set<Contient> getContenu() {
         return contenu;

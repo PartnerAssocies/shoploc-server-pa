@@ -20,4 +20,6 @@ public interface CommandeService {
     Commande addProduct(int cid, int pid, int quantite) throws Exception;
 
     ContenuCommandeDTO viewContentCommande(int cid) throws Exception;
+
+    Commande confirmCommande(int cid) throws CommandeNotFoundException;
 }

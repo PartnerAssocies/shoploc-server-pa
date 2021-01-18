@@ -19,8 +19,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,6 +35,8 @@ public class CommandeServiceImpl implements CommandeService {
     private ClientService clientService;
     private ProduitService produitService;
     private ContientRepository contientRepository;
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     /**
      * Si le createur est l'utilisateur lui même, dans ce cas c'est une commande avec click&collect,
@@ -50,6 +56,10 @@ public class CommandeServiceImpl implements CommandeService {
         changerEtat(CommandeEtat.PANNIER, c);
         c.setClient(client);
         c.setCommercant(com);
+
+        //on indique la date de la commande
+        updateDate(c);
+
         commandeRepository.save(c);
         return c;
     }
@@ -60,12 +70,16 @@ public class CommandeServiceImpl implements CommandeService {
      * @param etat
      * @param c
      * @return
-     * @throws CommandeNotFoundException
      */
     @Override
     public Commande changerEtat(CommandeEtat etat, Commande c) {
         c.setEtat(etat);
         return c;
+    }
+
+    private void updateDate(Commande c) throws ParseException {
+        Date today=new Date();
+        c.setDate(sdf.parse(sdf.format(today)));
     }
 
 
@@ -112,6 +126,11 @@ public class CommandeServiceImpl implements CommandeService {
         contient.setPid(produit);
         contient.setCid(commande);
         contientRepository.save(contient);
+
+        //on met à jour la date de mise à jour de la commande
+        updateDate(commande);
+        commandeRepository.save(commande);
+
         return commande;
     }
 
@@ -134,6 +153,16 @@ public class CommandeServiceImpl implements CommandeService {
         }
         contenu.setProduits(produits);
         return contenu;
+    }
+
+    @Override
+    public Commande confirmCommande(int cid) throws CommandeNotFoundException {
+        Commande commande = findById(cid);
+        commande.setEtat(CommandeEtat.EN_ATTENTE_DE_PAIEMENT);
+
+        commandeRepository.save(commande);
+
+        return commande;
     }
 
 
