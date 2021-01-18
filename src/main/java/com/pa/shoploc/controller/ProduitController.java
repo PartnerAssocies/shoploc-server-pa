@@ -2,7 +2,6 @@ package com.pa.shoploc.controller;
 
 import com.pa.shoploc.bo.Produit;
 import com.pa.shoploc.dto.produit.AddStockDTO;
-import com.pa.shoploc.dto.produit.DeleteProduitDTO;
 import com.pa.shoploc.dto.produit.ProduitDTO;
 import com.pa.shoploc.service.ProduitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +26,9 @@ public class ProduitController {
         return this.produitService.addStock(addStockDTO.getPid(), addStockDTO.getStock());
     }
 
-    @DeleteMapping("/deleteProduit")
-    public boolean deleteProduit(@RequestBody DeleteProduitDTO deleteProduitDTO){
-        return this.produitService.deleteProduit(deleteProduitDTO.getPid());
+    @DeleteMapping("/deleteProduit/{pid}")
+    public boolean deleteProduit(@PathVariable("pid") int pid){
+        return this.produitService.deleteProduit(pid);
     }
 
     @GetMapping("/listProduitsFromCommercant")

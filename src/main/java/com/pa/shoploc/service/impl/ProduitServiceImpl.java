@@ -35,7 +35,7 @@ public class ProduitServiceImpl implements ProduitService {
     public boolean deleteProduit(int p) {
         Produit produit = this.produitRepository.findById(p).orElse(null);
         if(produit!=null){
-            this.produitRepository.delete(produit);
+            this.produitRepository.deleteById(p);
             return true;
         }
         return false;

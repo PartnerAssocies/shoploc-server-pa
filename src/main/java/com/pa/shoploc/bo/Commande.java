@@ -2,6 +2,8 @@ package com.pa.shoploc.bo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pa.shoploc.enumeration.CommandeEtat;
+
+import java.util.HashSet;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,6 +15,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Set;
 
 
 @Entity
@@ -51,10 +54,10 @@ public class Commande {
     @JoinColumn(referencedColumnName="username")
     private Commercant commercant;
 
-    @OneToMany
+
     @JsonIgnore
-    @JoinColumn(name = "cid")
-    private List<Contient> contenu;
+    @OneToMany(mappedBy = "cid", cascade = CascadeType.REMOVE )
+    private Set<Contient> contenu=new HashSet<Contient>();
 
 
     public int getCid() {
@@ -129,11 +132,12 @@ public class Commande {
         this.commercant = commercant;
     }
 
-    public List<Contient> getContenu() {
+
+    public Set<Contient> getContenu() {
         return contenu;
     }
 
-    public void setContenu(List<Contient> contenu) {
+    public void setContenu(Set<Contient> contenu) {
         this.contenu = contenu;
     }
 }

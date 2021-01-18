@@ -1,6 +1,12 @@
 package com.pa.shoploc.bo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @SequenceGenerator(name = "seqProduit",initialValue = 1)
@@ -19,9 +25,12 @@ public class Produit {
     private float fidelitePointsRequis;
     @Column
     private String image;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="username")
     private Commercant cid;
+    @JsonIgnore
+    @OneToMany(mappedBy = "pid", cascade = CascadeType.REMOVE )
+    private Set<Contient> lines = new HashSet<Contient>();
 
     public int getPid() {
         return pid;

@@ -8,7 +8,7 @@ import java.util.List;
 public interface ProduitService {
 
     Produit addProduit(ProduitDTO p);
-    boolean deleteProduit(int pod);
+    boolean deleteProduit(int pid);
     Produit getProduitById(int pid) throws Exception;
     Produit addStock(int pid, int stock);
     List<Produit> listAllProduitFromCommercant(String cid);
