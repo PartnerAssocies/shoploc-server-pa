@@ -33,6 +33,11 @@ public class CommandeController {
         return commandeService.finAllByClient(username);
     }
 
+    @GetMapping("/{cid}")
+    public Commande findCommande(@PathVariable int cid) throws Exception {
+        return commandeService.findById(cid);
+    }
+
     @DeleteMapping("/deleteCommande/{cid}")
     public void deleteCommande(@PathVariable("cid")int cid) throws Exception {
         commandeService.deleteCommande(cid);

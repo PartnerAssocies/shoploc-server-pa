@@ -1,7 +1,6 @@
 package com.pa.shoploc.controller;
 
 import com.pa.shoploc.bo.Produit;
-import com.pa.shoploc.dto.produit.AddStockDTO;
 import com.pa.shoploc.dto.produit.ProduitDTO;
 import com.pa.shoploc.service.ProduitService;
 import org.springframework.beans.factory.annotation.Autowired;

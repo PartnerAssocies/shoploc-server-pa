@@ -1,5 +1,6 @@
 package com.pa.shoploc.bo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pa.shoploc.enumeration.Role;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -34,6 +35,7 @@ public class User implements Serializable,UserDetails {
 
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
         return Arrays.asList(authority);
