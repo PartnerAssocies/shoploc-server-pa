@@ -1,6 +1,7 @@
 package com.pa.shoploc.controller;
 
 import com.pa.shoploc.bo.Commande;
+import com.pa.shoploc.dto.commande.CommandeDTO;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
 import com.pa.shoploc.mapper.ContenuCommandeDTO;
 import com.pa.shoploc.service.CommandeService;
@@ -34,8 +35,8 @@ public class CommandeController {
     }
 
     @GetMapping("/{cid}")
-    public Commande findCommande(@PathVariable int cid) throws Exception {
-        return commandeService.findById(cid);
+    public CommandeDTO findCommande(@PathVariable int cid) throws Exception {
+        return commandeService.findByCommandeId(cid);
     }
 
     @DeleteMapping("/deleteCommande/{cid}")

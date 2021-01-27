@@ -1,6 +1,7 @@
 package com.pa.shoploc.service.impl;
 
 import com.pa.shoploc.bo.*;
+import com.pa.shoploc.dto.commande.CommandeDTO;
 import com.pa.shoploc.enumeration.CommandeEtat;
 import com.pa.shoploc.enumeration.Role;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
@@ -163,6 +164,22 @@ public class CommandeServiceImpl implements CommandeService {
         commandeRepository.save(commande);
 
         return commande;
+    }
+
+    @Override
+    public CommandeDTO findByCommandeId(int cid) throws Exception {
+        Commande c=findById(cid);
+        CommandeDTO dto=new CommandeDTO();
+        dto.setCid(cid);
+        dto.setClient(c.getClient().getUsername());
+        dto.setCommercant(c.getCommercant().getUsername());
+        dto.setCreeParClickAndCollect(c.isCreeParClickAndCollect());
+        dto.setDate(c.getDate());
+        dto.setEstPayeEnFidelite(c.isCreeParClickAndCollect());
+        dto.setEtat(c.getEtat());
+        dto.setNote(c.getNote());
+        dto.setTotal(c.getTotal());
+        return dto;
     }
 
 

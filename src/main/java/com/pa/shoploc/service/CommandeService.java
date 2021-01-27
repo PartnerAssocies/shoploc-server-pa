@@ -1,6 +1,7 @@
 package com.pa.shoploc.service;
 
 import com.pa.shoploc.bo.Commande;
+import com.pa.shoploc.dto.commande.CommandeDTO;
 import com.pa.shoploc.enumeration.CommandeEtat;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
 import com.pa.shoploc.exceptions.find.CommercantNotFoundException;
@@ -22,4 +23,6 @@ public interface CommandeService {
     ContenuCommandeDTO viewContentCommande(int cid) throws Exception;
 
     Commande confirmCommande(int cid) throws CommandeNotFoundException;
+
+    CommandeDTO findByCommandeId(int cid) throws Exception;
 }
