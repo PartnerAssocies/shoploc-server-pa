@@ -25,4 +25,7 @@ public interface CommandeService {
     Commande confirmCommande(int cid) throws CommandeNotFoundException;
 
     CommandeDTO findByCommandeId(int cid) throws Exception;
+
+    CommandeDTO paiementCommande(String username, int cid) throws Exception;
+
 }

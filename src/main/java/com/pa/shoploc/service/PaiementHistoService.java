@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PaiementHistoService {
 
-    void addTransaction(float money, Client username) throws ParseException;
+    void addTransaction(double money, Client username) throws ParseException;
 
     List<PaiementHisto> findUserHisto(Client user);
 

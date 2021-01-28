@@ -20,7 +20,7 @@ public class PaiementHistoServiceImpl implements PaiementHistoService {
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
-    public void addTransaction(float money, Client user) throws ParseException {
+    public void addTransaction(double money, Client user) throws ParseException {
         PaiementHisto paiementHisto=new PaiementHisto();
         Date today=new Date();
         paiementHisto.setDate(sdf.parse(sdf.format(today)));

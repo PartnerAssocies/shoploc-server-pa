@@ -37,7 +37,7 @@ public class CommandeServiceImpl implements CommandeService {
     private ProduitService produitService;
     private ContientRepository contientRepository;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+    private final double FACTEUR_POINTS_FIDELITES=0.05;
 
     /**
      * Si le createur est l'utilisateur lui même, dans ce cas c'est une commande avec click&collect,
@@ -128,11 +128,27 @@ public class CommandeServiceImpl implements CommandeService {
         contient.setCid(commande);
         contientRepository.save(contient);
 
-        //on met à jour la date de mise à jour de la commande
+        //on mets à jour la date de mise à jour de la commande
         updateDate(commande);
+
+        //on mets à jour le total de la commande à payer
+        updateTotal(commande);
+
         commandeRepository.save(commande);
 
         return commande;
+    }
+
+    /**
+     * On update le total à payer de la commande
+     * @param commande
+     */
+    private void updateTotal(Commande commande) {
+        double somme=0;
+        for(Contient c:commande.getContenu()){
+            somme+=c.getPid().getPrix()*c.getQuantite();
+        }
+        commande.setTotal(somme);
     }
 
     @Override
@@ -169,8 +185,37 @@ public class CommandeServiceImpl implements CommandeService {
     @Override
     public CommandeDTO findByCommandeId(int cid) throws Exception {
         Commande c=findById(cid);
+        return toDTO(c);
+    }
+
+    @Override
+    public CommandeDTO paiementCommande(String username, int cid) throws Exception {
+        Commande commande=findById(cid);
+        Client client=clientService.findById(username);
+        double total=commande.getTotal();
+
+        //exeption lance si pas assez d'argent
+        clientService.changeMoney(username,-1*total);
+
+        //la commande est paye elle est donc maintenant en preparation et on retire la somme a paye
+        commande.setTotal(0);
+        commande.setEtat(CommandeEtat.EN_PREPARATION);
+
+        //on va generer les points de fidélités
+        int pointsFidelite=(int)(total*FACTEUR_POINTS_FIDELITES);
+        client.setPointsFidelites(client.getPointsFidelites()+pointsFidelite);
+
+        //on update les models
+        clientService.update(client);
+        commandeRepository.save(commande);
+
+
+        return toDTO(commande);
+    }
+
+    private CommandeDTO toDTO(Commande c){
         CommandeDTO dto=new CommandeDTO();
-        dto.setCid(cid);
+        dto.setCid(c.getCid());
         dto.setClient(c.getClient().getUsername());
         dto.setCommercant(c.getCommercant().getUsername());
         dto.setCreeParClickAndCollect(c.isCreeParClickAndCollect());
@@ -179,8 +224,11 @@ public class CommandeServiceImpl implements CommandeService {
         dto.setEtat(c.getEtat());
         dto.setNote(c.getNote());
         dto.setTotal(c.getTotal());
+
         return dto;
     }
+
+
 
 
     @Autowired

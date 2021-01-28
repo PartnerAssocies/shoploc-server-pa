@@ -5,9 +5,11 @@ import com.pa.shoploc.dto.commande.CommandeDTO;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
 import com.pa.shoploc.mapper.ContenuCommandeDTO;
 import com.pa.shoploc.service.CommandeService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -53,6 +55,14 @@ public class CommandeController {
         return commandeService.addProduct(cid,pid,quantite);
     }
 
+
+    @PostMapping("/paiementCommande/{username}/{cid}")
+    public CommandeDTO paiementCommande(@PathVariable("username") String username, @PathVariable("cid") int cid) throws Exception{
+        if(StringUtils.isEmpty(username))
+            throw new IllegalArgumentException();
+
+        return commandeService.paiementCommande(username,cid);
+    }
 
     @GetMapping("/{cid}/viewContentCommande")
     public ContenuCommandeDTO contenuCommande(@PathVariable("cid") int cid) throws Exception {

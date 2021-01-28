@@ -32,7 +32,7 @@ public class PaiementHisto {
     @JoinColumn(name="username")
     Client user;
 
-    float money;
+    double money;
 
 
 }

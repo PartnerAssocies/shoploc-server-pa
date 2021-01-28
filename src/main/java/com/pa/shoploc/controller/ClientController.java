@@ -48,13 +48,14 @@ public class ClientController {
     }
 
 
-    @GetMapping("/{username}/paiementHisto")
+    @PostMapping("/{username}/paiementHisto")
     public List<PaiementHisto> paiementHisto(@PathVariable("username") String username) throws Exception{
         if(StringUtils.isEmpty(username))
             throw new IllegalArgumentException();
 
         return clientService.findAllPaiementHisto(username);
     }
+
 
     @Autowired
     public void setUserService(ClientService clientService) {

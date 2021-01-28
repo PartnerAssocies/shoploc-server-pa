@@ -14,7 +14,10 @@ public interface ClientService {
 
      Client findById(String username) throws Exception;
 
-     Client changeMoney(String username, float money) throws Exception;
+     Client changeMoney(String username, double money) throws Exception;
 
      List<PaiementHisto> findAllPaiementHisto(String username) throws Exception;
+
+     Client update(Client client) throws Exception;
+
 }

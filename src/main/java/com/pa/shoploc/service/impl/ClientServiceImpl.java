@@ -70,7 +70,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client changeMoney(String username, float money) throws Exception {
+    public Client changeMoney(String username, double money) throws Exception {
         Client c=findById(username);
 
         double newMoney=c.getArgent()+money;
@@ -91,6 +91,11 @@ public class ClientServiceImpl implements ClientService {
         Client user=findById(username);
 
         return paiementHistoService.findUserHisto(user);
+    }
+
+    @Override
+    public Client update(Client client){
+        return clientRepository.save(client);
     }
 
     @Autowired
