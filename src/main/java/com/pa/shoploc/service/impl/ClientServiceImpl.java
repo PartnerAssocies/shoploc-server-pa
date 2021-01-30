@@ -98,6 +98,11 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.save(client);
     }
 
+    @Override
+    public Double retrieveArgent(String username) throws Exception {
+        return findById(username).getArgent();
+    }
+
     @Autowired
     public void setClientRepository(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;

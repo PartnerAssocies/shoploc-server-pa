@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -54,6 +56,14 @@ public class ClientController {
             throw new IllegalArgumentException();
 
         return clientService.findAllPaiementHisto(username);
+    }
+
+    @GetMapping("/{username}/solde")
+    public Map soldeClient(@PathVariable("username") String username) throws Exception{
+        if(StringUtils.isEmpty(username))
+            throw new IllegalArgumentException();
+
+        return Collections.singletonMap("solde", clientService.retrieveArgent(username));
     }
 
 
