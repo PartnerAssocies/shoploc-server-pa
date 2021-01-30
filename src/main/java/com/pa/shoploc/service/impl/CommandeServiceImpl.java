@@ -166,6 +166,7 @@ public class CommandeServiceImpl implements CommandeService {
             p.setLibelle(contientProduit.getLibelle());
             p.setPid(contientProduit.getPid());
             p.setQuantite(c.getQuantite());
+            p.setPrix(contientProduit.getPrix());
             produits.add(p);
         }
         contenu.setProduits(produits);
