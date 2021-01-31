@@ -1,11 +1,16 @@
 package com.pa.shoploc.controller;
 
 import com.pa.shoploc.bo.Client;
+import com.pa.shoploc.bo.PaiementHisto;
 import com.pa.shoploc.dto.register.RegisterClientRequestDTO;
 import com.pa.shoploc.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -35,6 +40,32 @@ public class ClientController {
 
         return clientService.findById(username);
     }
+
+    @PostMapping("/{username}/changeMoney/{money:.+}")
+    public Client changeMoney(@PathVariable("username") String username,@PathVariable("money") float money) throws Exception{
+        if(StringUtils.isEmpty(username))
+            throw new IllegalArgumentException();
+
+        return clientService.changeMoney(username,money);
+    }
+
+
+    @PostMapping("/{username}/paiementHisto")
+    public List<PaiementHisto> paiementHisto(@PathVariable("username") String username) throws Exception{
+        if(StringUtils.isEmpty(username))
+            throw new IllegalArgumentException();
+
+        return clientService.findAllPaiementHisto(username);
+    }
+
+    @GetMapping("/{username}/solde")
+    public Map soldeClient(@PathVariable("username") String username) throws Exception{
+        if(StringUtils.isEmpty(username))
+            throw new IllegalArgumentException();
+
+        return Collections.singletonMap("solde", clientService.retrieveArgent(username));
+    }
+
 
     @Autowired
     public void setUserService(ClientService clientService) {

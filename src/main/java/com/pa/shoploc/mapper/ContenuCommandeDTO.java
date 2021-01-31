@@ -28,6 +28,7 @@ public class ContenuCommandeDTO {
         private String libelle;
         private int quantite;
         private String image;
+        private double prix;
         private float fidelitePointsRequis;
 
         public int getPid() {
@@ -70,6 +71,13 @@ public class ContenuCommandeDTO {
             this.fidelitePointsRequis = fidelitePointsRequis;
         }
 
+        public double getPrix() {
+            return prix;
+        }
+
+        public void setPrix(double prix) {
+            this.prix = prix;
+        }
     }
 }
 
