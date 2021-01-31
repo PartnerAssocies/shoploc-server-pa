@@ -18,7 +18,7 @@ public class CommandeController {
     private CommandeService commandeService;
 
     @PostMapping("/create/{client}/{commercant}")
-    public Commande creerCommande(@PathVariable(value = "client")  String client
+    public CommandeDTO creerCommande(@PathVariable(value = "client")  String client
             ,@PathVariable(value = "commercant")  String commercant) throws Exception {
 
         return commandeService.creerCommande(client,commercant);
@@ -26,13 +26,13 @@ public class CommandeController {
     }
 
     @PostMapping("/confirmCommande/{cid}")
-    public Commande confirmCommande(@PathVariable("cid") int cid) throws CommandeNotFoundException {
+    public CommandeDTO confirmCommande(@PathVariable("cid") int cid) throws CommandeNotFoundException {
         return commandeService.confirmCommande(cid);
 
     }
 
     @GetMapping("/findAllUserCommande/{username}")
-    public List<Commande> findAllUserCommande(@PathVariable("username") String username) throws Exception {
+    public List<CommandeDTO> findAllUserCommande(@PathVariable("username") String username) throws Exception {
         return commandeService.finAllByClient(username);
     }
 
@@ -47,7 +47,7 @@ public class CommandeController {
     }
 
     @PostMapping("/{cid}/addProduct/{pid}/{quantite}")
-    public Commande addProduct(@PathVariable("cid")int cid
+    public CommandeDTO addProduct(@PathVariable("cid")int cid
             ,@PathVariable("pid")int pid,@PathVariable("quantite")int quantite) throws Exception {
         if(quantite<0){
             throw new IllegalArgumentException("quantite can't be inferior than 0");

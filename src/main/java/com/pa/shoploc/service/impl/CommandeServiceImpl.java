@@ -47,7 +47,7 @@ public class CommandeServiceImpl implements CommandeService {
      * @return
      */
     @Override
-    public Commande creerCommande(String username, String commercant) throws Exception {
+    public CommandeDTO creerCommande(String username, String commercant) throws Exception {
         Commercant com = commercantService.findCommercantById(commercant);
         Client client = clientService.findById(username);
         Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
@@ -62,7 +62,7 @@ public class CommandeServiceImpl implements CommandeService {
         updateDate(c);
 
         commandeRepository.save(c);
-        return c;
+        return toDTO(c);
     }
 
     /**
@@ -93,9 +93,14 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
-    public List<Commande> finAllByClient(String username) throws Exception {
+    public List<CommandeDTO> finAllByClient(String username) throws Exception {
         Client c = clientService.findById(username);
-        return commandeRepository.findAllByClient(c);
+        List<Commande> list=commandeRepository.findAllByClient(c);
+        List<CommandeDTO> dtoList=new ArrayList<>();
+        for(Commande com:list){
+            dtoList.add(toDTO(com));
+        }
+        return dtoList;
     }
 
     @Override
@@ -117,7 +122,7 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
-    public Commande addProduct(int cid, int pid, int quantite) throws Exception {
+    public CommandeDTO addProduct(int cid, int pid, int quantite) throws Exception {
         Commande commande = findById(cid);
         Produit produit = produitService.getProduitById(pid);
         if (produit.getStock() < quantite)
@@ -136,7 +141,7 @@ public class CommandeServiceImpl implements CommandeService {
 
         commandeRepository.save(commande);
 
-        return commande;
+        return toDTO(commande);
     }
 
     /**
@@ -174,13 +179,13 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
-    public Commande confirmCommande(int cid) throws CommandeNotFoundException {
+    public CommandeDTO confirmCommande(int cid) throws CommandeNotFoundException {
         Commande commande = findById(cid);
         commande.setEtat(CommandeEtat.EN_ATTENTE_DE_PAIEMENT);
 
         commandeRepository.save(commande);
 
-        return commande;
+        return toDTO(commande);
     }
 
     @Override
