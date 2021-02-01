@@ -3,18 +3,12 @@ package com.pa.shoploc.bo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pa.shoploc.enumeration.CommandeEtat;
 
-import java.util.HashSet;
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
-
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -40,8 +34,6 @@ public class Commande {
     @Max(value = 5)
     private int note;
 
-    @Column
-    private boolean estPayeEnFidelite;
 
     @Column
     private boolean creeParClickAndCollect;
@@ -94,13 +86,6 @@ public class Commande {
         this.note = note;
     }
 
-    public boolean isEstPayeEnFidelite() {
-        return estPayeEnFidelite;
-    }
-
-    public void setEstPayeEnFidelite(boolean estPayeEnFidelite) {
-        this.estPayeEnFidelite = estPayeEnFidelite;
-    }
 
     public boolean isCreeParClickAndCollect() {
         return creeParClickAndCollect;

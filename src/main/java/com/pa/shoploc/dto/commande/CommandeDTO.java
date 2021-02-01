@@ -17,7 +17,6 @@ public class CommandeDTO {
     double total;
     CommandeEtat etat;
     int note;
-    boolean estPayeEnFidelite;
     boolean creeParClickAndCollect;
     String client;
     String commercant;

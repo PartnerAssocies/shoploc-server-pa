@@ -9,7 +9,7 @@ import com.pa.shoploc.exceptions.find.CommercantNotFoundException;
 import com.pa.shoploc.exceptions.unauthorized.NoMoreStockException;
 import com.pa.shoploc.exceptions.unauthorized.NotTheOwnerCommandeException;
 import com.pa.shoploc.exceptions.unauthorized.UnauthorizedToDeleteCommandeException;
-import com.pa.shoploc.mapper.ContenuCommandeDTO;
+import com.pa.shoploc.dto.commande.ContenuCommandeDTO;
 import com.pa.shoploc.repository.CommandeRepository;
 import com.pa.shoploc.repository.ContientRepository;
 import com.pa.shoploc.service.*;
@@ -18,7 +18,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -71,10 +70,11 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
      * @return
      */
     @Override
-    public Commande changerEtat(CommandeEtat etat, Commande c) {
+    public void changerEtat(CommandeEtat etat, Commande c) {
         c.setEtat(etat);
-        return c;
     }
+
+
 
     private void updateDate(Commande c) throws ParseException {
         Date today=new Date();
@@ -166,21 +166,13 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
             p.setPid(contientProduit.getPid());
             p.setQuantite(c.getQuantite());
             p.setPrix(contientProduit.getPrix());
+            p.setNbProduitsEnFidelite(c.getNbProduitsEnFidelite());
             produits.add(p);
         }
         contenu.setProduits(produits);
         return contenu;
     }
 
-    @Override
-    public CommandeDTO confirmCommande(int cid) throws CommandeNotFoundException {
-        Commande commande = findById(cid);
-        commande.setEtat(CommandeEtat.EN_ATTENTE_DE_PAIEMENT);
-
-        commandeRepository.save(commande);
-
-        return toDTO(commande);
-    }
 
     @Override
     public CommandeDTO findByCommandeId(int cid) throws Exception {
@@ -221,6 +213,15 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
         return toDTOList(list);
     }
 
+    @Override
+    public CommandeDTO nextEtatCommande(int cid, CommandeEtat etat) throws CommandeNotFoundException {
+        Commande commande=findById(cid);
+        changerEtat(etat,commande);
+
+        return toDTO(commandeRepository.save(commande));
+    }
+
+
     public CommandeDTO toDTO(Commande c){
         CommandeDTO dto=new CommandeDTO();
         dto.setCid(c.getCid());
@@ -228,7 +229,6 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
         dto.setCommercant(c.getCommercant().getUsername());
         dto.setCreeParClickAndCollect(c.isCreeParClickAndCollect());
         dto.setDate(c.getDate());
-        dto.setEstPayeEnFidelite(c.isCreeParClickAndCollect());
         dto.setEtat(c.getEtat());
         dto.setNote(c.getNote());
         dto.setTotal(c.getTotal());

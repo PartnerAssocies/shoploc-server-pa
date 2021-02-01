@@ -5,14 +5,14 @@ import com.pa.shoploc.dto.commande.CommandeDTO;
 import com.pa.shoploc.enumeration.CommandeEtat;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
 import com.pa.shoploc.exceptions.find.CommercantNotFoundException;
-import com.pa.shoploc.mapper.ContenuCommandeDTO;
+import com.pa.shoploc.dto.commande.ContenuCommandeDTO;
 
 import java.util.List;
 
 public interface CommandeService {
 
     CommandeDTO creerCommande(String username,String commercant) throws Exception;
-    Commande changerEtat(CommandeEtat etat,Commande c);
+    void changerEtat(CommandeEtat etat,Commande c);
     Commande findById(int cid) throws CommandeNotFoundException;
     List<CommandeDTO> finAllByClient(String username) throws Exception;
 
@@ -22,11 +22,12 @@ public interface CommandeService {
 
     ContenuCommandeDTO viewContentCommande(int cid) throws Exception;
 
-    CommandeDTO confirmCommande(int cid) throws CommandeNotFoundException;
 
     CommandeDTO findByCommandeId(int cid) throws Exception;
 
     CommandeDTO paiementCommande(String username, int cid) throws Exception;
 
     List<CommandeDTO> findCommandesByEtatAndCommercant(String username, CommandeEtat etat) throws CommercantNotFoundException;
+
+    CommandeDTO nextEtatCommande(int cid, CommandeEtat newEtat) throws CommandeNotFoundException;
 }

@@ -1,10 +1,9 @@
 package com.pa.shoploc.controller;
 
-import com.pa.shoploc.bo.Commande;
 import com.pa.shoploc.dto.commande.CommandeDTO;
 import com.pa.shoploc.enumeration.CommandeEtat;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
-import com.pa.shoploc.mapper.ContenuCommandeDTO;
+import com.pa.shoploc.dto.commande.ContenuCommandeDTO;
 import com.pa.shoploc.service.CommandeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -28,8 +27,17 @@ public class CommandeController {
 
     @PostMapping("/confirmCommande/{cid}")
     public CommandeDTO confirmCommande(@PathVariable("cid") int cid) throws CommandeNotFoundException {
-        return commandeService.confirmCommande(cid);
+        return commandeService.nextEtatCommande(cid,CommandeEtat.EN_ATTENTE_DE_PAIEMENT);
+    }
 
+    @PostMapping("/aRecuperer/{cid}")
+    public CommandeDTO aRecuperer(@PathVariable("cid") int cid) throws CommandeNotFoundException {
+        return commandeService.nextEtatCommande(cid,CommandeEtat.A_RECUPERER);
+    }
+
+    @PostMapping("/recupere/{cid}")
+    public CommandeDTO recupere(@PathVariable("cid") int cid) throws CommandeNotFoundException {
+        return commandeService.nextEtatCommande(cid,CommandeEtat.RECUPEREE);
     }
 
     @GetMapping("/findAllUserCommande/{username}")
