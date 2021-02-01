@@ -28,4 +28,5 @@ public interface CommandeService {
 
     CommandeDTO paiementCommande(String username, int cid) throws Exception;
 
+    List<CommandeDTO> findCommandesByEtatAndCommercant(String username, CommandeEtat etat) throws CommercantNotFoundException;
 }

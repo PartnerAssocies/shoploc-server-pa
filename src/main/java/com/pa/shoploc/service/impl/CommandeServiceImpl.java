@@ -5,16 +5,14 @@ import com.pa.shoploc.dto.commande.CommandeDTO;
 import com.pa.shoploc.enumeration.CommandeEtat;
 import com.pa.shoploc.enumeration.Role;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
+import com.pa.shoploc.exceptions.find.CommercantNotFoundException;
 import com.pa.shoploc.exceptions.unauthorized.NoMoreStockException;
 import com.pa.shoploc.exceptions.unauthorized.NotTheOwnerCommandeException;
 import com.pa.shoploc.exceptions.unauthorized.UnauthorizedToDeleteCommandeException;
 import com.pa.shoploc.mapper.ContenuCommandeDTO;
 import com.pa.shoploc.repository.CommandeRepository;
 import com.pa.shoploc.repository.ContientRepository;
-import com.pa.shoploc.service.ClientService;
-import com.pa.shoploc.service.CommandeService;
-import com.pa.shoploc.service.CommercantService;
-import com.pa.shoploc.service.ProduitService;
+import com.pa.shoploc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class CommandeServiceImpl implements CommandeService {
+public class CommandeServiceImpl implements CommandeService, DtoService<Commande,CommandeDTO> {
 
     private CommandeRepository commandeRepository;
     private CommercantService commercantService;
@@ -96,11 +94,7 @@ public class CommandeServiceImpl implements CommandeService {
     public List<CommandeDTO> finAllByClient(String username) throws Exception {
         Client c = clientService.findById(username);
         List<Commande> list=commandeRepository.findAllByClient(c);
-        List<CommandeDTO> dtoList=new ArrayList<>();
-        for(Commande com:list){
-            dtoList.add(toDTO(com));
-        }
-        return dtoList;
+        return toDTOList(list);
     }
 
     @Override
@@ -219,7 +213,15 @@ public class CommandeServiceImpl implements CommandeService {
         return toDTO(commande);
     }
 
-    private CommandeDTO toDTO(Commande c){
+    @Override
+    public List<CommandeDTO> findCommandesByEtatAndCommercant(String username, CommandeEtat etat) throws CommercantNotFoundException {
+        Commercant commercant=commercantService.findCommercantById(username);
+        List<Commande> list=commandeRepository.findAllByCommercantAndEtatOrderByDate(commercant,etat);
+
+        return toDTOList(list);
+    }
+
+    public CommandeDTO toDTO(Commande c){
         CommandeDTO dto=new CommandeDTO();
         dto.setCid(c.getCid());
         dto.setClient(c.getClient().getUsername());
@@ -233,6 +235,16 @@ public class CommandeServiceImpl implements CommandeService {
 
         return dto;
     }
+
+    @Override
+    public List<CommandeDTO> toDTOList(List<Commande> list) {
+        List<CommandeDTO> dtoList=new ArrayList<>();
+        for(Commande d:list){
+            dtoList.add(toDTO(d));
+        }
+        return dtoList;
+    }
+
 
 
 

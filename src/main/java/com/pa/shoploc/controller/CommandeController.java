@@ -2,6 +2,7 @@ package com.pa.shoploc.controller;
 
 import com.pa.shoploc.bo.Commande;
 import com.pa.shoploc.dto.commande.CommandeDTO;
+import com.pa.shoploc.enumeration.CommandeEtat;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
 import com.pa.shoploc.mapper.ContenuCommandeDTO;
 import com.pa.shoploc.service.CommandeService;
@@ -67,6 +68,13 @@ public class CommandeController {
     @GetMapping("/{cid}/viewContentCommande")
     public ContenuCommandeDTO contenuCommande(@PathVariable("cid") int cid) throws Exception {
         return commandeService.viewContentCommande(cid);
+    }
+
+    @GetMapping("/findCommandesByEtatAndCommercant/{username}/{etat}")
+    public List<CommandeDTO> findCommandesByEtatAndCommercant(@PathVariable("username") String username
+            , @PathVariable("etat") CommandeEtat etat) throws Exception {
+
+        return commandeService.findCommandesByEtatAndCommercant(username,etat);
     }
 
 
