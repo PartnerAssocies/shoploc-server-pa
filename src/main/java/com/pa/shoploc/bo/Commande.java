@@ -23,10 +23,10 @@ public class Commande {
     private Date date;
 
     @Column
-    private double total;
+    private double total=0;
 
     @Column
-    private double totalPointsFidelite;
+    private int totalPointsFidelite=0;
 
 
     @NotNull
@@ -91,11 +91,11 @@ public class Commande {
     }
 
 
-    public double getTotalPointsFidelite() {
+    public int getTotalPointsFidelite() {
         return totalPointsFidelite;
     }
 
-    public void setTotalPointsFidelite(double totalPointsFidelite) {
+    public void setTotalPointsFidelite(int totalPointsFidelite) {
         this.totalPointsFidelite = totalPointsFidelite;
     }
 

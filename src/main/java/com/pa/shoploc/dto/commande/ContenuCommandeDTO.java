@@ -31,7 +31,7 @@ public class ContenuCommandeDTO {
         private int quantite;
         private String image;
         private double prix;
-        private float fidelitePointsRequis;
+        private int fidelitePointsRequis;
         private int nbProduitsEnFidelite;
 
 
@@ -75,11 +75,11 @@ public class ContenuCommandeDTO {
             this.image = image;
         }
 
-        public float getFidelitePointsRequis() {
+        public int getFidelitePointsRequis() {
             return fidelitePointsRequis;
         }
 
-        public void setFidelitePointsRequis(float fidelitePointsRequis) {
+        public void setFidelitePointsRequis(int fidelitePointsRequis) {
             this.fidelitePointsRequis = fidelitePointsRequis;
         }
 

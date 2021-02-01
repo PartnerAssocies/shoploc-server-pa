@@ -29,10 +29,10 @@ public class Contient {
     Commande cid;
 
     @Column
-    int quantite;
+    int quantite=0;
 
     @Column
-    int nbProduitsEnFidelite;
+    int nbProduitsEnFidelite=0;
 
 
 }

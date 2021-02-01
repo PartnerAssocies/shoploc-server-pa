@@ -5,7 +5,7 @@ public class ProduitDTO {
     private String libelle;
     private float prix;
     private int stock;
-    private float fidelitePointsRequis;
+    private int fidelitePointsRequis;
     private String image;
     private String commercantId;
 
@@ -34,11 +34,11 @@ public class ProduitDTO {
         this.stock = stock;
     }
 
-    public float getFidelitePointsRequis() {
+    public int getFidelitePointsRequis() {
         return fidelitePointsRequis;
     }
 
-    public void setFidelitePointsRequis(float fidelitePointsRequis) {
+    public void setFidelitePointsRequis(int fidelitePointsRequis) {
         this.fidelitePointsRequis = fidelitePointsRequis;
     }
 

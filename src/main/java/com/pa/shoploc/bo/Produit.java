@@ -22,7 +22,7 @@ public class Produit {
     @Column
     private int stock;
     @Column(name="fidelite_points_requis")
-    private float fidelitePointsRequis;
+    private int fidelitePointsRequis;
     @Column
     private String image;
     @ManyToOne
@@ -64,11 +64,11 @@ public class Produit {
         this.stock = stock;
     }
 
-    public float getFidelitePointsRequis() {
+    public int getFidelitePointsRequis() {
         return fidelitePointsRequis;
     }
 
-    public void setFidelitePointsRequis(float fidelitePointsRequis) {
+    public void setFidelitePointsRequis(int fidelitePointsRequis) {
         this.fidelitePointsRequis = fidelitePointsRequis;
     }
 
