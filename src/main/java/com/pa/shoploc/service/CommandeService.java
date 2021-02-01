@@ -12,8 +12,11 @@ import java.util.List;
 public interface CommandeService {
 
     CommandeDTO creerCommande(String username,String commercant) throws Exception;
+
     void changerEtat(CommandeEtat etat,Commande c);
+
     Commande findById(int cid) throws CommandeNotFoundException;
+
     List<CommandeDTO> finAllByClient(String username) throws Exception;
 
     void deleteCommande(int cid) throws Exception;
@@ -30,4 +33,6 @@ public interface CommandeService {
     List<CommandeDTO> findCommandesByEtatAndCommercant(String username, CommandeEtat etat) throws CommercantNotFoundException;
 
     CommandeDTO nextEtatCommande(int cid, CommandeEtat newEtat) throws CommandeNotFoundException;
+
+    CommandeDTO addProductFidelite(int cid, int pid, int quantite) throws Exception;
 }

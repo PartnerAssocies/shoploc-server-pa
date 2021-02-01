@@ -64,6 +64,16 @@ public class CommandeController {
         return commandeService.addProduct(cid,pid,quantite);
     }
 
+    @PostMapping("/{cid}/addProductFidelite/{pid}/{quantite}")
+    public CommandeDTO addProductFidelite(@PathVariable("cid")int cid,
+       @PathVariable("pid")int pid,@PathVariable("quantite")int quantite) throws Exception {
+        if(quantite<0){
+            throw new IllegalArgumentException("quantite can't be inferior than 0");
+        }
+        return commandeService.addProductFidelite(cid,pid,quantite);
+    }
+
+
 
     @PostMapping("/paiementCommande/{username}/{cid}")
     public CommandeDTO paiementCommande(@PathVariable("username") String username, @PathVariable("cid") int cid) throws Exception{

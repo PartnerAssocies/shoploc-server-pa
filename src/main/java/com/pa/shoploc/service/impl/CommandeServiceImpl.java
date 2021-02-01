@@ -7,6 +7,7 @@ import com.pa.shoploc.enumeration.Role;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
 import com.pa.shoploc.exceptions.find.CommercantNotFoundException;
 import com.pa.shoploc.exceptions.unauthorized.NoMoreStockException;
+import com.pa.shoploc.exceptions.unauthorized.NotEnoughProductOrderedException;
 import com.pa.shoploc.exceptions.unauthorized.NotTheOwnerCommandeException;
 import com.pa.shoploc.exceptions.unauthorized.UnauthorizedToDeleteCommandeException;
 import com.pa.shoploc.dto.commande.ContenuCommandeDTO;
@@ -121,10 +122,23 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
         Produit produit = produitService.getProduitById(pid);
         if (produit.getStock() < quantite)
             throw new NoMoreStockException();
-        Contient contient = new Contient();
+
+        //on va verif que le contient existe pas déjà
+        ContientPk pk=new ContientPk();
+        pk.setCid(cid);
+        pk.setPid(pid);
+
+        Contient contient = contientRepository.findById(pk).orElse(null);
+
+        if(contient==null) {
+            contient = new Contient();
+            contient.setPid(produit);
+            contient.setCid(commande);
+        }
+
+        //on update la quantite du produit
         contient.setQuantite(quantite);
-        contient.setPid(produit);
-        contient.setCid(commande);
+
         contientRepository.save(contient);
 
         //on mets à jour la date de mise à jour de la commande
@@ -145,9 +159,27 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
     private void updateTotal(Commande commande) {
         double somme=0;
         for(Contient c:commande.getContenu()){
-            somme+=c.getPid().getPrix()*c.getQuantite();
+            double prix=c.getPid().getPrix();
+            double quantite=c.getQuantite();
+
+            somme+=prix*quantite;
         }
         commande.setTotal(somme);
+    }
+
+    /**
+     * On update le total de points de fidelite à depenser
+     * @param commande
+     */
+    private void updateTotalFidelite(Commande commande) {
+        int somme=0;
+        for(Contient c:commande.getContenu()){
+            int fidelitePointsRequis=c.getPid().getFidelitePointsRequis();
+            int quantite=c.getNbProduitsEnFidelite();
+
+            somme+=fidelitePointsRequis*quantite;
+        }
+        commande.setTotalPointsFidelite(somme);
     }
 
     @Override
@@ -221,6 +253,37 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
         return toDTO(commandeRepository.save(commande));
     }
 
+    @Override
+    public CommandeDTO addProductFidelite(int cid, int pid, int quantite) throws Exception {
+        Commande commande = findById(cid);
+        Produit produit = produitService.getProduitById(pid);
+
+        //on va verif que le contient existe pas déjà
+        ContientPk pk=new ContientPk();
+        pk.setCid(cid);
+        pk.setPid(pid);
+
+        Contient contient = contientRepository.findById(pk).orElse(null);
+
+        //on ne peut pas mettre en fidelite plus de produit que l'on en demande
+        if(contient.getQuantite()<quantite)
+            throw new NotEnoughProductOrderedException();
+
+        contient.setNbProduitsEnFidelite(quantite);
+
+        contientRepository.save(contient);
+
+        //on mets à jour la date de mise à jour de la commande
+        updateDate(commande);
+
+        //on mets à jour le total de la commande à payer
+        updateTotalFidelite(commande);
+
+        commandeRepository.save(commande);
+
+        return toDTO(commande);
+    }
+
 
     public CommandeDTO toDTO(Commande c){
         CommandeDTO dto=new CommandeDTO();
@@ -232,6 +295,7 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
         dto.setEtat(c.getEtat());
         dto.setNote(c.getNote());
         dto.setTotal(c.getTotal());
+        dto.setTotalPointsFidelite(c.getTotalPointsFidelite());
 
         return dto;
     }
