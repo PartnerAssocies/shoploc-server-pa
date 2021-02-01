@@ -8,5 +8,7 @@ public interface RefreshTokenService {
 
     RefreshToken save(RefreshToken refreshToken);
 
+    RefreshToken findByUsername(String username);
+
     void deleteById(String token);
 }

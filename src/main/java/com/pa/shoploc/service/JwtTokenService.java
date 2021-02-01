@@ -10,4 +10,5 @@ public interface JwtTokenService {
     String extractUsername(String token);
     boolean validateAccessToken(String token, UserDetails userDetails);
 
+    RefreshToken findRefreshTokenByUsername(String username);
 }

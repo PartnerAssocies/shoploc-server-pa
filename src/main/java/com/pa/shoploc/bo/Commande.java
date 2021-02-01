@@ -25,6 +25,10 @@ public class Commande {
     @Column
     private double total;
 
+    @Column
+    private double totalPointsFidelite;
+
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private CommandeEtat etat;
@@ -86,6 +90,14 @@ public class Commande {
         this.note = note;
     }
 
+
+    public double getTotalPointsFidelite() {
+        return totalPointsFidelite;
+    }
+
+    public void setTotalPointsFidelite(double totalPointsFidelite) {
+        this.totalPointsFidelite = totalPointsFidelite;
+    }
 
     public boolean isCreeParClickAndCollect() {
         return creeParClickAndCollect;

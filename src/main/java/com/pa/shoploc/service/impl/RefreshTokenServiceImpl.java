@@ -21,6 +21,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
+    public RefreshToken findByUsername(String username) {
+        return refreshTokenRepository.findByUsername(username);
+    }
+
+    @Override
     public void deleteById(String token) {
         refreshTokenRepository.deleteById(token);
     }
