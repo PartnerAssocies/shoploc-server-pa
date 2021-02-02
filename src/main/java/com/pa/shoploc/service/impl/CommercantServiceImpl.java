@@ -91,7 +91,7 @@ public class CommercantServiceImpl implements CommercantService {
      * @return
      */
     private void generateCoordXY(Lieu lieu) throws Exception {
-        String url=GVRNT_API_URL+"?q=" +lieu.getAdresse()+" "+lieu.getVille();
+        String url=GVRNT_API_URL+"?q=" +lieu.getAdresse()+" "+lieu.getVille()+"&limit=1";
         DataGouvApiAdresseMapper mapper=restTemplate.getForObject(url, DataGouvApiAdresseMapper.class);
 
         if(mapper!=null&& mapper.getFeatures()!=null
