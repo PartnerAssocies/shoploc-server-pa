@@ -5,22 +5,20 @@ import com.pa.shoploc.dto.commande.CommandeDTO;
 import com.pa.shoploc.enumeration.CommandeEtat;
 import com.pa.shoploc.enumeration.Role;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
+import com.pa.shoploc.exceptions.find.CommercantNotFoundException;
 import com.pa.shoploc.exceptions.unauthorized.NoMoreStockException;
+import com.pa.shoploc.exceptions.unauthorized.NotEnoughProductOrderedException;
 import com.pa.shoploc.exceptions.unauthorized.NotTheOwnerCommandeException;
 import com.pa.shoploc.exceptions.unauthorized.UnauthorizedToDeleteCommandeException;
-import com.pa.shoploc.mapper.ContenuCommandeDTO;
+import com.pa.shoploc.dto.commande.ContenuCommandeDTO;
 import com.pa.shoploc.repository.CommandeRepository;
 import com.pa.shoploc.repository.ContientRepository;
-import com.pa.shoploc.service.ClientService;
-import com.pa.shoploc.service.CommandeService;
-import com.pa.shoploc.service.CommercantService;
-import com.pa.shoploc.service.ProduitService;
+import com.pa.shoploc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class CommandeServiceImpl implements CommandeService {
+public class CommandeServiceImpl implements CommandeService, DtoService<Commande,CommandeDTO> {
 
     private CommandeRepository commandeRepository;
     private CommercantService commercantService;
@@ -73,10 +71,11 @@ public class CommandeServiceImpl implements CommandeService {
      * @return
      */
     @Override
-    public Commande changerEtat(CommandeEtat etat, Commande c) {
+    public void changerEtat(CommandeEtat etat, Commande c) {
         c.setEtat(etat);
-        return c;
     }
+
+
 
     private void updateDate(Commande c) throws ParseException {
         Date today=new Date();
@@ -96,11 +95,7 @@ public class CommandeServiceImpl implements CommandeService {
     public List<CommandeDTO> finAllByClient(String username) throws Exception {
         Client c = clientService.findById(username);
         List<Commande> list=commandeRepository.findAllByClient(c);
-        List<CommandeDTO> dtoList=new ArrayList<>();
-        for(Commande com:list){
-            dtoList.add(toDTO(com));
-        }
-        return dtoList;
+        return toDTOList(list);
     }
 
     @Override
@@ -127,10 +122,23 @@ public class CommandeServiceImpl implements CommandeService {
         Produit produit = produitService.getProduitById(pid);
         if (produit.getStock() < quantite)
             throw new NoMoreStockException();
-        Contient contient = new Contient();
+
+        //on va verif que le contient existe pas déjà
+        ContientPk pk=new ContientPk();
+        pk.setCid(cid);
+        pk.setPid(pid);
+
+        Contient contient = contientRepository.findById(pk).orElse(null);
+
+        if(contient==null) {
+            contient = new Contient();
+            contient.setPid(produit);
+            contient.setCid(commande);
+        }
+
+        //on update la quantite du produit
         contient.setQuantite(quantite);
-        contient.setPid(produit);
-        contient.setCid(commande);
+
         contientRepository.save(contient);
 
         //on mets à jour la date de mise à jour de la commande
@@ -151,9 +159,27 @@ public class CommandeServiceImpl implements CommandeService {
     private void updateTotal(Commande commande) {
         double somme=0;
         for(Contient c:commande.getContenu()){
-            somme+=c.getPid().getPrix()*c.getQuantite();
+            double prix=c.getPid().getPrix();
+            double quantite=c.getQuantite();
+
+            somme+=prix*quantite;
         }
         commande.setTotal(somme);
+    }
+
+    /**
+     * On update le total de points de fidelite à depenser
+     * @param commande
+     */
+    private void updateTotalFidelite(Commande commande) {
+        int somme=0;
+        for(Contient c:commande.getContenu()){
+            int fidelitePointsRequis=c.getPid().getFidelitePointsRequis();
+            int quantite=c.getNbProduitsEnFidelite();
+
+            somme+=fidelitePointsRequis*quantite;
+        }
+        commande.setTotalPointsFidelite(somme);
     }
 
     @Override
@@ -172,21 +198,13 @@ public class CommandeServiceImpl implements CommandeService {
             p.setPid(contientProduit.getPid());
             p.setQuantite(c.getQuantite());
             p.setPrix(contientProduit.getPrix());
+            p.setNbProduitsEnFidelite(c.getNbProduitsEnFidelite());
             produits.add(p);
         }
         contenu.setProduits(produits);
         return contenu;
     }
 
-    @Override
-    public CommandeDTO confirmCommande(int cid) throws CommandeNotFoundException {
-        Commande commande = findById(cid);
-        commande.setEtat(CommandeEtat.EN_ATTENTE_DE_PAIEMENT);
-
-        commandeRepository.save(commande);
-
-        return toDTO(commande);
-    }
 
     @Override
     public CommandeDTO findByCommandeId(int cid) throws Exception {
@@ -219,20 +237,78 @@ public class CommandeServiceImpl implements CommandeService {
         return toDTO(commande);
     }
 
-    private CommandeDTO toDTO(Commande c){
+    @Override
+    public List<CommandeDTO> findCommandesByEtatAndCommercant(String username, CommandeEtat etat) throws CommercantNotFoundException {
+        Commercant commercant=commercantService.findCommercantById(username);
+        List<Commande> list=commandeRepository.findAllByCommercantAndEtatOrderByDate(commercant,etat);
+
+        return toDTOList(list);
+    }
+
+    @Override
+    public CommandeDTO nextEtatCommande(int cid, CommandeEtat etat) throws CommandeNotFoundException {
+        Commande commande=findById(cid);
+        changerEtat(etat,commande);
+
+        return toDTO(commandeRepository.save(commande));
+    }
+
+    @Override
+    public CommandeDTO addProductFidelite(int cid, int pid, int quantite) throws Exception {
+        Commande commande = findById(cid);
+        Produit produit = produitService.getProduitById(pid);
+
+        //on va verif que le contient existe pas déjà
+        ContientPk pk=new ContientPk();
+        pk.setCid(cid);
+        pk.setPid(pid);
+
+        Contient contient = contientRepository.findById(pk).orElse(null);
+
+        //on ne peut pas mettre en fidelite plus de produit que l'on en demande
+        if(contient.getQuantite()<quantite)
+            throw new NotEnoughProductOrderedException();
+
+        contient.setNbProduitsEnFidelite(quantite);
+
+        contientRepository.save(contient);
+
+        //on mets à jour la date de mise à jour de la commande
+        updateDate(commande);
+
+        //on mets à jour le total de la commande à payer
+        updateTotalFidelite(commande);
+
+        commandeRepository.save(commande);
+
+        return toDTO(commande);
+    }
+
+
+    public CommandeDTO toDTO(Commande c){
         CommandeDTO dto=new CommandeDTO();
         dto.setCid(c.getCid());
         dto.setClient(c.getClient().getUsername());
         dto.setCommercant(c.getCommercant().getUsername());
         dto.setCreeParClickAndCollect(c.isCreeParClickAndCollect());
         dto.setDate(c.getDate());
-        dto.setEstPayeEnFidelite(c.isCreeParClickAndCollect());
         dto.setEtat(c.getEtat());
         dto.setNote(c.getNote());
         dto.setTotal(c.getTotal());
+        dto.setTotalPointsFidelite(c.getTotalPointsFidelite());
 
         return dto;
     }
+
+    @Override
+    public List<CommandeDTO> toDTOList(List<Commande> list) {
+        List<CommandeDTO> dtoList=new ArrayList<>();
+        for(Commande d:list){
+            dtoList.add(toDTO(d));
+        }
+        return dtoList;
+    }
+
 
 
 

@@ -1,9 +1,9 @@
 package com.pa.shoploc.controller;
 
-import com.pa.shoploc.bo.Commande;
 import com.pa.shoploc.dto.commande.CommandeDTO;
+import com.pa.shoploc.enumeration.CommandeEtat;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
-import com.pa.shoploc.mapper.ContenuCommandeDTO;
+import com.pa.shoploc.dto.commande.ContenuCommandeDTO;
 import com.pa.shoploc.service.CommandeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -27,8 +27,17 @@ public class CommandeController {
 
     @PostMapping("/confirmCommande/{cid}")
     public CommandeDTO confirmCommande(@PathVariable("cid") int cid) throws CommandeNotFoundException {
-        return commandeService.confirmCommande(cid);
+        return commandeService.nextEtatCommande(cid,CommandeEtat.EN_ATTENTE_DE_PAIEMENT);
+    }
 
+    @PostMapping("/aRecuperer/{cid}")
+    public CommandeDTO aRecuperer(@PathVariable("cid") int cid) throws CommandeNotFoundException {
+        return commandeService.nextEtatCommande(cid,CommandeEtat.A_RECUPERER);
+    }
+
+    @PostMapping("/recupere/{cid}")
+    public CommandeDTO recupere(@PathVariable("cid") int cid) throws CommandeNotFoundException {
+        return commandeService.nextEtatCommande(cid,CommandeEtat.RECUPEREE);
     }
 
     @GetMapping("/findAllUserCommande/{username}")
@@ -55,6 +64,16 @@ public class CommandeController {
         return commandeService.addProduct(cid,pid,quantite);
     }
 
+    @PostMapping("/{cid}/addProductFidelite/{pid}/{quantite}")
+    public CommandeDTO addProductFidelite(@PathVariable("cid")int cid,
+       @PathVariable("pid")int pid,@PathVariable("quantite")int quantite) throws Exception {
+        if(quantite<0){
+            throw new IllegalArgumentException("quantite can't be inferior than 0");
+        }
+        return commandeService.addProductFidelite(cid,pid,quantite);
+    }
+
+
 
     @PostMapping("/paiementCommande/{username}/{cid}")
     public CommandeDTO paiementCommande(@PathVariable("username") String username, @PathVariable("cid") int cid) throws Exception{
@@ -67,6 +86,13 @@ public class CommandeController {
     @GetMapping("/{cid}/viewContentCommande")
     public ContenuCommandeDTO contenuCommande(@PathVariable("cid") int cid) throws Exception {
         return commandeService.viewContentCommande(cid);
+    }
+
+    @GetMapping("/findCommandesByEtatAndCommercant/{username}/{etat}")
+    public List<CommandeDTO> findCommandesByEtatAndCommercant(@PathVariable("username") String username
+            , @PathVariable("etat") CommandeEtat etat) throws Exception {
+
+        return commandeService.findCommandesByEtatAndCommercant(username,etat);
     }
 
 

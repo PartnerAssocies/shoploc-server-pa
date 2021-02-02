@@ -15,9 +15,9 @@ public class CommandeDTO {
     int cid;
     Date date;
     double total;
+    int totalPointsFidelite;
     CommandeEtat etat;
     int note;
-    boolean estPayeEnFidelite;
     boolean creeParClickAndCollect;
     String client;
     String commercant;

@@ -1,4 +1,4 @@
-package com.pa.shoploc.mapper;
+package com.pa.shoploc.dto.commande;
 
 import java.util.List;
 
@@ -22,6 +22,8 @@ public class ContenuCommandeDTO {
         this.cid = cid;
     }
 
+
+
     public static class ProduitCommandeDTO {
 
         private int pid;
@@ -29,7 +31,17 @@ public class ContenuCommandeDTO {
         private int quantite;
         private String image;
         private double prix;
-        private float fidelitePointsRequis;
+        private int fidelitePointsRequis;
+        private int nbProduitsEnFidelite;
+
+
+        public int getNbProduitsEnFidelite() {
+            return nbProduitsEnFidelite;
+        }
+
+        public void setNbProduitsEnFidelite(int nbProduitsEnFidelite) {
+            this.nbProduitsEnFidelite = nbProduitsEnFidelite;
+        }
 
         public int getPid() {
             return pid;
@@ -63,11 +75,11 @@ public class ContenuCommandeDTO {
             this.image = image;
         }
 
-        public float getFidelitePointsRequis() {
+        public int getFidelitePointsRequis() {
             return fidelitePointsRequis;
         }
 
-        public void setFidelitePointsRequis(float fidelitePointsRequis) {
+        public void setFidelitePointsRequis(int fidelitePointsRequis) {
             this.fidelitePointsRequis = fidelitePointsRequis;
         }
 

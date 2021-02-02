@@ -112,6 +112,11 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         return (username.equals(userDetails.getUsername())&&!isTokenExpired(token));
     }
 
+    @Override
+    public RefreshToken findRefreshTokenByUsername(String username) {
+        return refreshTokenService.findByUsername(username);
+    }
+
 
     @Autowired
     public void setRefreshTokenService(RefreshTokenService refreshTokenService) {

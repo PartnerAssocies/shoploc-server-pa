@@ -57,7 +57,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new UserInValidationException();
 
         final String accessToken = jwtTokenService.generateAccessToken(username);
-        final String refreshToken = jwtTokenService.generateRefreshToken(username).getRefreshToken();
+        final String refreshToken;
+        RefreshToken rt = jwtTokenService.findRefreshTokenByUsername(username);
+        if(rt==null)
+            refreshToken=jwtTokenService.generateRefreshToken(username).getRefreshToken();
+        else
+            refreshToken=rt.getRefreshToken();
+
+
 
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setAccessToken(accessToken);
