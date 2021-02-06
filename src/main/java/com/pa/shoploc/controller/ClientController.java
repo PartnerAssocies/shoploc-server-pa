@@ -66,6 +66,15 @@ public class ClientController {
         return Collections.singletonMap("solde", clientService.retrieveArgent(username));
     }
 
+    @GetMapping("/{username}/soldeFidelite")
+    public Map soldeFidelite(@PathVariable("username") String username) throws Exception{
+        if(StringUtils.isEmpty(username))
+            throw new IllegalArgumentException();
+
+        return Collections.singletonMap("soldeFidelite", clientService.retrieveFidelite(username));
+    }
+
+
 
     @Autowired
     public void setUserService(ClientService clientService) {

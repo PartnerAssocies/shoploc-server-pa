@@ -20,5 +20,7 @@ public interface ClientService {
 
      Client update(Client client) throws Exception;
 
-    Double retrieveArgent(String username) throws Exception;
+     Double retrieveArgent(String username) throws Exception;
+
+     int retrieveFidelite(String username) throws Exception;
 }
