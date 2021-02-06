@@ -32,6 +32,9 @@ public class Contient {
     int quantite=0;
 
     @Column
+    int nbProduitsNormaux=0;
+
+    @Column
     int nbProduitsEnFidelite=0;
 
 

@@ -13,4 +13,5 @@ public interface ProduitService {
     Produit addStock(int pid, int stock);
     List<Produit> listAllProduitFromCommercant(String cid);
 
+    Produit save(Produit p);
 }

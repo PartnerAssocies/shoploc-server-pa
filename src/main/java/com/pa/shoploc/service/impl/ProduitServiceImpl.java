@@ -69,6 +69,11 @@ public class ProduitServiceImpl implements ProduitService {
         return this.produitRepository.findAllByCid(c);
     }
 
+    @Override
+    public Produit save(Produit p) {
+        return produitRepository.save(p);
+    }
+
     @Autowired
     public void setProduitRepository(ProduitRepository produitRepository) {
         this.produitRepository = produitRepository;
