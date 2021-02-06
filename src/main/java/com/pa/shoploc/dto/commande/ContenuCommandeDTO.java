@@ -33,6 +33,7 @@ public class ContenuCommandeDTO {
         private double prix;
         private int fidelitePointsRequis;
         private int nbProduitsEnFidelite;
+        private int nbProduitsNormaux;
 
 
         public int getNbProduitsEnFidelite() {
@@ -81,6 +82,14 @@ public class ContenuCommandeDTO {
 
         public void setFidelitePointsRequis(int fidelitePointsRequis) {
             this.fidelitePointsRequis = fidelitePointsRequis;
+        }
+
+        public int getNbProduitsNormaux() {
+            return nbProduitsNormaux;
+        }
+
+        public void setNbProduitsNormaux(int nbProduitsNormaux) {
+            this.nbProduitsNormaux = nbProduitsNormaux;
         }
 
         public double getPrix() {

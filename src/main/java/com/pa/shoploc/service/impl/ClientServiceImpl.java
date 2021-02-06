@@ -103,6 +103,11 @@ public class ClientServiceImpl implements ClientService {
         return findById(username).getArgent();
     }
 
+    @Override
+    public int retrieveFidelite(String username) throws Exception {
+        return findById(username).getPointsFidelites();
+    }
+
     @Autowired
     public void setClientRepository(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
