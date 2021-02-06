@@ -204,6 +204,7 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
             p.setQuantite(c.getQuantite());
             p.setPrix(contientProduit.getPrix());
             p.setNbProduitsEnFidelite(c.getNbProduitsEnFidelite());
+            p.setNbProduitsNormaux(c.getNbProduitsNormaux());
             produits.add(p);
         }
         contenu.setProduits(produits);
