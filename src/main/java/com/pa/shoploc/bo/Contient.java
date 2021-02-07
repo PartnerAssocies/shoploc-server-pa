@@ -17,6 +17,14 @@ import javax.validation.Constraint;
 @IdClass(value=ContientPk.class)
 public class Contient {
 
+    public Contient(Produit pid, Commande cid) {
+        this.pid = pid;
+        this.cid = cid;
+    }
+
+    public Contient() {
+    }
+
     @Id
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(unique=false,name = "pid")

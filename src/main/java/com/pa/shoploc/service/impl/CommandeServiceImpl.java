@@ -291,7 +291,8 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
         pk.setCid(cid);
         pk.setPid(pid);
 
-        Contient contient = contientRepository.findById(pk).orElse(null);
+        Contient contient = contientRepository.findById(pk).orElse(new Contient(produit,commande));
+
 
         contient.setNbProduitsEnFidelite(quantite);
 
