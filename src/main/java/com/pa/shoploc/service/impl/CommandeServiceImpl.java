@@ -75,13 +75,11 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
         c.setEtat(etat);
     }
 
-
-
+    
     private void updateDate(Commande c) throws ParseException {
         Date today=new Date();
         c.setDate(sdf.parse(sdf.format(today)));
     }
-
 
     @Override
     public Commande findById(int cid) throws CommandeNotFoundException {
@@ -151,10 +149,11 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
 
 
         }
+
         //on mets à jour la date de mise à jour de la commande
         updateDate(commande);
 
-        //on mets à jour le total de la commande à payer
+        //on mets à jour le total dela  commande à payer
         updateTotal(commande);
 
         commandeRepository.save(commande);

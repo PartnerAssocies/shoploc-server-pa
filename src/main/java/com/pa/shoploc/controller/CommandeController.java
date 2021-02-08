@@ -34,6 +34,11 @@ public class CommandeController {
         return commandeService.nextEtatCommande(cid,CommandeEtat.EN_ATTENTE_DE_PAIEMENT_SHOPLOC);
     }
 
+    @PostMapping("/etatPannier/{cid}")
+    public CommandeDTO etatPannier(@PathVariable("cid") int cid) throws Exception {
+        return commandeService.nextEtatCommande(cid,CommandeEtat.PANNIER);
+    }
+
     @PostMapping("/aRecuperer/{cid}")
     public CommandeDTO aRecuperer(@PathVariable("cid") int cid) throws Exception {
         return commandeService.nextEtatCommande(cid,CommandeEtat.A_RECUPERER);
