@@ -4,6 +4,7 @@ import com.pa.shoploc.bo.*;
 import com.pa.shoploc.dto.commande.CommandeDTO;
 import com.pa.shoploc.enumeration.CommandeEtat;
 import com.pa.shoploc.enumeration.Role;
+import com.pa.shoploc.exceptions.find.CommandeContientNotFoundException;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
 import com.pa.shoploc.exceptions.find.CommercantNotFoundException;
 import com.pa.shoploc.exceptions.unauthorized.NoMoreStockException;
@@ -105,7 +106,8 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
         CommandeEtat etat = commande.getEtat();
 
         if (commande.getClient().getUsername().equals(username)) {
-            if (etat.equals(CommandeEtat.PANNIER) || etat.equals(CommandeEtat.EN_ATTENTE_DE_PAIEMENT))
+            if (etat.equals(CommandeEtat.PANNIER) || etat.equals(CommandeEtat.EN_ATTENTE_DE_PAIEMENT_DIRECT)||
+                    etat.equals(CommandeEtat.EN_ATTENTE_DE_PAIEMENT_SHOPLOC))
                 commandeRepository.deleteById(cid);
             else
                 throw new UnauthorizedToDeleteCommandeException();
@@ -127,21 +129,28 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
         pk.setCid(cid);
         pk.setPid(pid);
 
+
         Contient contient = contientRepository.findById(pk).orElse(null);
 
-        if(contient==null) {
-            contient = new Contient();
-            contient.setPid(produit);
-            contient.setCid(commande);
+        //on supprime la ligne de produit
+        if(quantite==0){
+            deleteContient(contient);
+        }else{
+            if(contient==null) {
+                contient = new Contient();
+                contient.setPid(produit);
+                contient.setCid(commande);
+            }
+
+            //on update la quantite non en fidelite du produit
+            contient.setNbProduitsNormaux(quantite);
+            //on update la quantite total du produit
+            updateTotalQuantiteProduit(contient);
+
+            contientRepository.save(contient);
+
+
         }
-
-        //on update la quantite non en fidelite du produit
-        contient.setNbProduitsNormaux(quantite);
-        //on update la quantite total du produit
-        updateTotalQuantiteProduit(contient);
-
-        contientRepository.save(contient);
-
         //on mets à jour la date de mise à jour de la commande
         updateDate(commande);
 
@@ -151,6 +160,13 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
         commandeRepository.save(commande);
 
         return toDTO(commande);
+    }
+
+
+
+    private void deleteContient(Contient contient){
+        if(contient!=null)
+            contientRepository.delete(contient);
     }
 
     private void updateTotalQuantiteProduit(Contient contient) {
@@ -271,9 +287,16 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
     }
 
     @Override
-    public CommandeDTO nextEtatCommande(int cid, CommandeEtat etat) throws CommandeNotFoundException {
+    public CommandeDTO nextEtatCommande(int cid, CommandeEtat etat) throws CommandeNotFoundException, CommandeContientNotFoundException {
         Commande commande=findById(cid);
         changerEtat(etat,commande);
+
+        if(etat.equals(CommandeEtat.EN_ATTENTE_DE_PAIEMENT_DIRECT)
+                ||etat.equals(CommandeEtat.EN_ATTENTE_DE_PAIEMENT_SHOPLOC)){
+            if(commande.getContenu()==null ||commande.getContenu().isEmpty())
+                throw new CommandeContientNotFoundException();
+        }
+
 
         return toDTO(commandeRepository.save(commande));
     }

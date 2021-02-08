@@ -3,6 +3,7 @@ package com.pa.shoploc.service;
 import com.pa.shoploc.bo.Commande;
 import com.pa.shoploc.dto.commande.CommandeDTO;
 import com.pa.shoploc.enumeration.CommandeEtat;
+import com.pa.shoploc.exceptions.find.CommandeContientNotFoundException;
 import com.pa.shoploc.exceptions.find.CommandeNotFoundException;
 import com.pa.shoploc.exceptions.find.CommercantNotFoundException;
 import com.pa.shoploc.dto.commande.ContenuCommandeDTO;
@@ -32,7 +33,7 @@ public interface CommandeService {
 
     List<CommandeDTO> findCommandesByEtatAndCommercant(String username, CommandeEtat etat) throws CommercantNotFoundException;
 
-    CommandeDTO nextEtatCommande(int cid, CommandeEtat newEtat) throws CommandeNotFoundException;
+    CommandeDTO nextEtatCommande(int cid, CommandeEtat newEtat) throws CommandeNotFoundException, CommandeContientNotFoundException;
 
     CommandeDTO addProductFidelite(int cid, int pid, int quantite) throws Exception;
 }

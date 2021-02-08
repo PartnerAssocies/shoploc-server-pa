@@ -22,21 +22,25 @@ public class CommandeController {
             ,@PathVariable(value = "commercant")  String commercant) throws Exception {
 
         return commandeService.creerCommande(client,commercant);
-
     }
 
-    @PostMapping("/confirmCommande/{cid}")
-    public CommandeDTO confirmCommande(@PathVariable("cid") int cid) throws CommandeNotFoundException {
-        return commandeService.nextEtatCommande(cid,CommandeEtat.EN_ATTENTE_DE_PAIEMENT);
+    @PostMapping("/confirmCommandeDirect/{cid}")
+    public CommandeDTO confirmCommandeDirect(@PathVariable("cid") int cid) throws Exception {
+        return commandeService.nextEtatCommande(cid,CommandeEtat.EN_ATTENTE_DE_PAIEMENT_DIRECT);
+    }
+
+    @PostMapping("/confirmCommandeShoploc/{cid}")
+    public CommandeDTO confirmCommandeShoploc(@PathVariable("cid") int cid) throws Exception {
+        return commandeService.nextEtatCommande(cid,CommandeEtat.EN_ATTENTE_DE_PAIEMENT_SHOPLOC);
     }
 
     @PostMapping("/aRecuperer/{cid}")
-    public CommandeDTO aRecuperer(@PathVariable("cid") int cid) throws CommandeNotFoundException {
+    public CommandeDTO aRecuperer(@PathVariable("cid") int cid) throws Exception {
         return commandeService.nextEtatCommande(cid,CommandeEtat.A_RECUPERER);
     }
 
     @PostMapping("/recupere/{cid}")
-    public CommandeDTO recupere(@PathVariable("cid") int cid) throws CommandeNotFoundException {
+    public CommandeDTO recupere(@PathVariable("cid") int cid) throws Exception {
         return commandeService.nextEtatCommande(cid,CommandeEtat.RECUPEREE);
     }
 
