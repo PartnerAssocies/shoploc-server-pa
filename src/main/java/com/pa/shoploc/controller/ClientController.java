@@ -74,6 +74,14 @@ public class ClientController {
         return Collections.singletonMap("soldeFidelite", clientService.retrieveFidelite(username));
     }
 
+    @GetMapping("/{username}/estVfp")
+    public Map estVfp(@PathVariable("username") String username) throws Exception{
+        if(StringUtils.isEmpty(username))
+            throw new IllegalArgumentException();
+
+        return Collections.singletonMap("nbJoursRestant", 0);
+    }
+
 
 
     @Autowired
