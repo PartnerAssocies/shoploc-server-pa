@@ -33,7 +33,7 @@ public interface CommandeService {
 
     List<CommandeDTO> findCommandesByEtatAndCommercant(String username, CommandeEtat etat) throws CommercantNotFoundException;
 
-    CommandeDTO nextEtatCommande(int cid, CommandeEtat newEtat) throws CommandeNotFoundException, CommandeContientNotFoundException;
+    CommandeDTO nextEtatCommande(int cid, CommandeEtat newEtat) throws Exception;
 
     CommandeDTO addProductFidelite(int cid, int pid, int quantite) throws Exception;
 }

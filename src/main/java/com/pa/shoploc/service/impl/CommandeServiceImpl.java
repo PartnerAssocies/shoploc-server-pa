@@ -286,15 +286,30 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
     }
 
     @Override
-    public CommandeDTO nextEtatCommande(int cid, CommandeEtat etat) throws CommandeNotFoundException, CommandeContientNotFoundException {
+    public CommandeDTO nextEtatCommande(int cid, CommandeEtat etat) throws Exception {
         Commande commande=findById(cid);
-        changerEtat(etat,commande);
 
         if(etat.equals(CommandeEtat.EN_ATTENTE_DE_PAIEMENT_DIRECT)
                 ||etat.equals(CommandeEtat.EN_ATTENTE_DE_PAIEMENT_SHOPLOC)){
             if(commande.getContenu()==null ||commande.getContenu().isEmpty())
                 throw new CommandeContientNotFoundException();
         }
+
+        if(etat.equals(CommandeEtat.A_RECUPERER)&&
+                commande.getEtat().equals(CommandeEtat.EN_ATTENTE_DE_PAIEMENT_DIRECT)){
+            Client client=commande.getClient();
+
+            //on va generer les points de fidélités
+            int pointsFidelite=(int)(commande.getTotal()*FACTEUR_POINTS_FIDELITES);
+            client.setPointsFidelites(client.getPointsFidelites()+pointsFidelite);
+
+            clientService.update(client);
+
+        }
+
+
+
+        changerEtat(etat,commande);
 
 
         return toDTO(commandeRepository.save(commande));
