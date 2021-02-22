@@ -2,6 +2,7 @@ package com.pa.shoploc.service;
 
 import com.pa.shoploc.bo.Client;
 import com.pa.shoploc.bo.PaiementHisto;
+import com.pa.shoploc.dto.client.VfpDTO;
 import com.pa.shoploc.dto.register.RegisterClientRequestDTO;
 import org.springframework.stereotype.Service;
 
@@ -23,4 +24,6 @@ public interface ClientService {
      Double retrieveArgent(String username) throws Exception;
 
      int retrieveFidelite(String username) throws Exception;
+
+     VfpDTO vfpStatus(String username) throws Exception;
 }

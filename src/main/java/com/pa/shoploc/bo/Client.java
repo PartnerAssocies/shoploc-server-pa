@@ -2,58 +2,30 @@ package com.pa.shoploc.bo;
 
 
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.util.Date;
 
 @Entity
+@Getter
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Client extends User {
 
     private String nom;
     private String prenom;
     private double argent;
-    @Column(columnDefinition = "BOOLEAN DEFAULT false")
-    private boolean estVfp;
+    @Column(columnDefinition = "integer DEFAULT 5")
+    private int dayBeforeVfp;
+    private Date vfpBeginDate;
+    private Date vfpEndDate;
     private int pointsFidelites;
 
-    public String getNom() {
-        return nom;
-    }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public double getArgent() {
-        return argent;
-    }
-
-    public void setArgent(double argent) {
-        this.argent = argent;
-    }
-
-    public boolean isEstVfp() {
-        return estVfp;
-    }
-
-    public void setEstVfp(boolean estVfp) {
-        this.estVfp = estVfp;
-    }
-
-    public int getPointsFidelites() {
-        return pointsFidelites;
-    }
-
-    public void setPointsFidelites(int pointsFidelites) {
-        this.pointsFidelites = pointsFidelites;
-    }
 }

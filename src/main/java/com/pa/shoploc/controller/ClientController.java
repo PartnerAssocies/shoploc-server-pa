@@ -2,6 +2,7 @@ package com.pa.shoploc.controller;
 
 import com.pa.shoploc.bo.Client;
 import com.pa.shoploc.bo.PaiementHisto;
+import com.pa.shoploc.dto.client.VfpDTO;
 import com.pa.shoploc.dto.register.RegisterClientRequestDTO;
 import com.pa.shoploc.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,11 +76,11 @@ public class ClientController {
     }
 
     @GetMapping("/{username}/estVfp")
-    public Map estVfp(@PathVariable("username") String username) throws Exception{
+    public VfpDTO estVfp(@PathVariable("username") String username) throws Exception{
         if(StringUtils.isEmpty(username))
             throw new IllegalArgumentException();
 
-        return Collections.singletonMap("nbJoursRestant", 0);
+        return clientService.vfpStatus(username);
     }
 
 

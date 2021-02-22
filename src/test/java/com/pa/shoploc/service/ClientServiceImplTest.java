@@ -54,7 +54,6 @@ public class ClientServiceImplTest {
         client.setUsername("dupont@gmail.com");
         client.setPrenom("Alex");
         client.setPointsFidelites(0);
-        client.setEstVfp(false);
         client.setArgent(0);
         client.setPassword("test");
         client.setRole(Role.CLIENT);
@@ -110,7 +109,6 @@ public class ClientServiceImplTest {
         chan.setUsername("yong@gmail.com");
         chan.setPrenom("Yong");
         chan.setPointsFidelites(0);
-        chan.setEstVfp(false);
         chan.setArgent(0);
         chan.setPassword("test");
         chan.setRole(Role.CLIENT);
