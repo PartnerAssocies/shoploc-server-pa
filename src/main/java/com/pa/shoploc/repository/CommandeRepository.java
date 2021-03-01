@@ -7,6 +7,7 @@ import com.pa.shoploc.enumeration.CommandeEtat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -19,5 +20,5 @@ public interface CommandeRepository extends JpaRepository<Commande,Integer> {
     @Query("SELECT function('date_format',c1.date, '%y-%m-%D') FROM Commande c1 where c1.etat " +
             "in (:etats) and c1.date >= :dayPointCheck " +
             "AND c1.client=:c group by function('date_format',c1.date, '%y-%m-%D')")
-    List<String> findCommandFromOneWeekByUsername(Client c, Date dayPointCheck,List<CommandeEtat> etats);
+    List<String> findCommandFromOneWeekByUsername(@Param("c") Client c, @Param("dayPointCheck") Date dayPointCheck, @Param("etats") List<CommandeEtat> etats);
 }
