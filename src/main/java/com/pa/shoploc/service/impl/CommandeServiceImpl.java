@@ -50,7 +50,11 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
         Client client = clientService.findById(username);
         Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
         Commande c = new Commande();
-        boolean clickAndCollectCreation = authorities.contains("ROLE_" + Role.CLIENT.toString());
+        boolean clickAndCollectCreation = false;
+        for(GrantedAuthority authority:authorities){
+            if(authority.getAuthority().equals("ROLE_"+Role.CLIENT.toString()));
+                clickAndCollectCreation=true;
+        }
         c.setCreeParClickAndCollect(clickAndCollectCreation);
         changerEtat(CommandeEtat.PANNIER, c);
         c.setClient(client);
