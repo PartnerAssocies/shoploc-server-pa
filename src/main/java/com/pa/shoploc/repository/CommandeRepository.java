@@ -15,7 +15,7 @@ import java.util.List;
 public interface CommandeRepository extends JpaRepository<Commande,Integer> {
 
     List<Commande> findAllByClient(Client client);
-    List<Commande> findAllByCommercantAndEtatOrderByDate(Commercant commercant, CommandeEtat etat);
+    List<Commande> findAllByCommercantAndEtatOrderByDateDesc(Commercant commercant, CommandeEtat etat);
     @Query("SELECT function('date_format',c1.date, '%y-%m-%D') FROM Commande c1 where c1.etat " +
             "in (:etats) and c1.date >= :dayPointCheck " +
             "AND c1.client=:c group by function('date_format',c1.date, '%y-%m-%D')")

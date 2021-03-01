@@ -35,7 +35,7 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
     private ProduitService produitService;
     private ContientRepository contientRepository;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private final double FACTEUR_POINTS_FIDELITES=0.05;
+    private final double FACTEUR_POINTS_FIDELITES=500;
 
     /**
      * Si le createur est l'utilisateur lui même, dans ce cas c'est une commande avec click&collect,
@@ -280,7 +280,7 @@ public class CommandeServiceImpl implements CommandeService, DtoService<Commande
     @Override
     public List<CommandeDTO> findCommandesByEtatAndCommercant(String username, CommandeEtat etat) throws CommercantNotFoundException {
         Commercant commercant=commercantService.findCommercantById(username);
-        List<Commande> list=commandeRepository.findAllByCommercantAndEtatOrderByDate(commercant,etat);
+        List<Commande> list=commandeRepository.findAllByCommercantAndEtatOrderByDateDesc(commercant,etat);
 
         return toDTOList(list);
     }
